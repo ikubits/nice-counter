@@ -1,6 +1,7 @@
 import styles from './main.scss';
 
-const DIGITS = '0123456789'.split('');
+const ALPHABET = '0123456789'.split('');
+const EMPTY = '0';
 
 function createEl(tagName, attrs = {}) {
   // element
@@ -14,6 +15,41 @@ function createEl(tagName, attrs = {}) {
   return el;
 }
 
+function createSpinner(_value, _isActive) {
+  const spinnerEl = createEl('span', {
+    class: 'nc--spinner',
+  });
+
+  const value = _value;
+  const index = ALPHABET.indexOf(value);
+  const isDigit = index !== -1;
+  const empty = isDigit ? EMPTY : value;
+  const isStatic = !isDigit;
+
+  if (isStatic) spinnerEl.innerText = value;
+
+  function setActive(isActive) {
+    if (isStatic) return;
+
+    spinnerEl.innerText = isActive ? value : empty;
+  }
+  setActive(_isActive);
+
+  function getEl() {
+    return spinnerEl;
+  }
+
+  function destroy() {
+
+  }
+
+  return {
+    getEl,
+    setActive,
+    destroy,
+  };
+}
+
 function createWebComponent(_value, _isActive) {
   const valueChars = _value.split('');
   const size = valueChars.length;
@@ -24,24 +60,13 @@ function createWebComponent(_value, _isActive) {
   });
 
   const fragment = document.createDocumentFragment();
-  const charObjs = [];
+  const spinners = [];
   for (let i = 0; i < size; i++) {
-    const charEl = createEl('span', {
-      class: 'nc--char',
-    });
+    const spinner = createSpinner(valueChars[i], _isActive);
 
-    const char = valueChars[i];
-    const isDigit = DIGITS.includes(char)
-    const charObj = {
-      el: charEl,
-      value: char,
-      empty: isDigit ? '0' : char,
-      isStatic: !isDigit,
-    };
+    spinners.push(spinner);
 
-    charEl.innerText = _isActive ? valueChars[i] : emptyChars[i];
-    fragment.appendChild(charEl);
-    charObjs.push(charObj);
+    fragment.appendChild(spinner.getEl());
   }
   rootEl.appendChild(fragment);
 
@@ -50,10 +75,7 @@ function createWebComponent(_value, _isActive) {
   function setActive(isActive) {
     console.log(isActive);
     for (let i = 0; i < size; i++) {
-      const { el, value, empty, isStatic } = charObjs[i];
-      if (isStatic) continue;
-
-      el.innerText = isActive ? value : empty;
+      spinners[i].setActive(isActive);
     }
   }
 
@@ -62,7 +84,9 @@ function createWebComponent(_value, _isActive) {
   }
 
   function destroy() {
-
+    for (let i = 0; i < size; i++) {
+      spinners[i].destroy();
+    }
   }
 
   return {

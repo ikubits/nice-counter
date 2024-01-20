@@ -1,9 +1,13 @@
 .nc {
   display: inline-flex;
 
-  &--char {
+  &--spinner {
     display: inline-flex;
     flex-direction: column;
     text-align: center;
   }
+
+  // &--glyph {
+  //   text-align: center;
+  // }
 }
