@@ -1,0 +1,27 @@
+{
+  "name": "nice-counter",
+  "version": "1.0.0",
+  "description": "Web component form animated value count up",
+  "type": "module",
+  "main": "dist/nice-counter.es.js",
+  "scripts": {
+    "start": "npm run watch",
+    "watch": "rollup --config --watch",
+    "build": "rollup --config",
+    "serve": "serve ."
+  },
+  "keywords": [
+    "counter",
+    "countup",
+    "countdown",
+    "odometer"
+  ],
+  "author": "dobrapyra",
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "rollup": "^4.9.5",
+    "rollup-plugin-scss": "^4.0.0",
+    "sass": "^1.70.0"
+  }
+}

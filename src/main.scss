@@ -1,0 +1,9 @@
+.nc {
+  display: inline-flex;
+
+  &--char {
+    display: inline-flex;
+    flex-direction: column;
+    text-align: center;
+  }
+}

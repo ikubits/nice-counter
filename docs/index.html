@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1">
+    <title>Docs</title>
+  </head>
+  <body>
+    <style>
+      html {
+        min-height: 100%;
+      }
+
+      html, body {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        overflow-x: clip;
+      }
+
+      #static,
+      #nice-counter {
+        font-size: 54px;
+        line-height: 1.2;
+        font-family: Verdana, Tahoma, sans-serif;
+      }
+
+      #static {
+        margin: auto;
+        margin-bottom: 30px;
+      }
+
+      #nice-counter {
+        margin: 0 auto;
+      }
+
+      #toggle {
+        margin: auto;
+        margin-top: 40px;
+        background-color: #323232;
+        color: #f3f3f3;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1;
+        padding: 16px 32px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      #toggle:hover {
+        background-color: #424242;
+      }
+    </style>
+
+    <span
+      id="static"
+    >123456789.00</span>
+
+    <nice-counter
+      id="nice-counter"
+      active
+    >123456789.00</nice-counter>
+
+    <button id="toggle">Toggle</button>
+
+    <script type="module" src="../dist/nice-counter.es.js"></script>
+    <script type="module">
+      (function(){
+        const counterEl = document.getElementById('nice-counter');
+        const toggleEl = document.getElementById('toggle');
+
+        let active = false;
+        function onClick() {
+          active = !active;
+          // countUpEl.setAttribute('active', active);
+
+          counterEl.active = !counterEl.active;
+        }
+
+        toggleEl.addEventListener('click', onClick);
+      })();
+    </script>
+  </body>
+</html>
