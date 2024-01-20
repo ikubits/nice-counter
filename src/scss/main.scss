@@ -17,10 +17,14 @@
     display: flex;
     flex-direction: column;
     text-align: center;
-    transition: transform 2s ease-in-out;
+    visibility: hidden;
   }
 
   &__glyph {
     flex-shrink: 0;
+
+    &:not(&--static) {
+      user-select: none;
+    }
   }
 }
