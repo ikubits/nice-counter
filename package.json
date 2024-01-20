@@ -19,7 +19,11 @@
   "author": "dobrapyra",
   "license": "MIT",
   "devDependencies": {
+    "@babel/eslint-parser": "^7.23.3",
+    "@rollup/plugin-eslint": "^9.0.5",
     "@rollup/plugin-terser": "^0.4.4",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "rollup": "^4.9.5",
     "rollup-plugin-scss": "^4.0.0",
     "sass": "^1.70.0"
