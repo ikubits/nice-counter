@@ -17,7 +17,6 @@ export default function createSpinner(_value, _isActive, alphabet) {
 
   const spinnerEl = isStatic ? null : createSpinnerEl(alphabet);
   if (!isStatic) {
-    boxEl.appendChild(spinnerEl);
     staticGlyphEl.style.visibility = 'hidden';
   }
 
@@ -28,9 +27,11 @@ export default function createSpinner(_value, _isActive, alphabet) {
 
     clearTimeout(timeout);
 
-    staticGlyphEl.style.visibility = 'hidden';
+    boxEl.appendChild(spinnerEl);
+    // eslint-disable-next-line no-unused-expressions
+    spinnerEl.offsetWidth; // force reflow
 
-    spinnerEl.style.visibility = 'visible';
+    staticGlyphEl.style.visibility = 'hidden';
     spinnerEl.style.transition = `transform ${duration / 1000}s ease-in-out`;
     spinnerEl.style.transform = `translate3d(0, ${-targetIndex * 100}%, 0)`;
 
@@ -38,9 +39,9 @@ export default function createSpinner(_value, _isActive, alphabet) {
 
     timeout = setTimeout(() => {
       spinnerEl.style.transition = '';
-      spinnerEl.style.visibility = '';
-
       staticGlyphEl.style.visibility = '';
+
+      if (spinnerEl.parentElement === boxEl) boxEl.removeChild(spinnerEl);
     }, duration);
   }
   setActive(_isActive);
