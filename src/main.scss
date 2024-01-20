@@ -1,13 +1,26 @@
 .nc {
   display: inline-flex;
+  overflow: hidden;
+  line-height: 1;
 
-  &--spinner {
+  &__box {
+    position: relative;
     display: inline-flex;
-    flex-direction: column;
-    text-align: center;
   }
 
-  // &--glyph {
-  //   text-align: center;
-  // }
+  &__spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    transition: transform 2s ease-in-out;
+  }
+
+  &__glyph {
+    flex-shrink: 0;
+  }
 }
