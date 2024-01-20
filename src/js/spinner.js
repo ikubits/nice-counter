@@ -1,29 +1,24 @@
+import { BOX_TYPE } from './consts';
 import { createEl, createGlyphEl, createSpinnerEl } from './elements';
 
-export default function createSpinner(_value, _isActive, alphabet) {
+export default function createSpinner(initialBox, alphabet) {
   const boxEl = createEl('span', {
     class: 'nc__box',
   });
 
-  const value = _value;
-  const index = alphabet.indexOf(value);
-  const isDigit = index !== -1;
-  const isStatic = !isDigit;
-
   let timeout = null;
 
-  const staticGlyphEl = createGlyphEl(value, true);
+  // -- create
+  const staticGlyphEl = createGlyphEl(initialBox.char, true);
   boxEl.appendChild(staticGlyphEl);
 
-  const spinnerEl = isStatic ? null : createSpinnerEl(alphabet);
-  if (!isStatic) {
-    staticGlyphEl.style.visibility = 'hidden';
-  }
+  const spinnerEl = initialBox.type === BOX_TYPE.SPINNER
+    ? createSpinnerEl(alphabet)
+    : null;
 
-  function setActive(isActive, duration = 1000) {
+  // -- methods
+  function setValue(newBox, duration = 1000) {
     if (spinnerEl === null) return;
-
-    const targetIndex = isActive ? index : 0;
 
     clearTimeout(timeout);
 
@@ -32,10 +27,10 @@ export default function createSpinner(_value, _isActive, alphabet) {
     spinnerEl.offsetWidth; // force reflow
 
     staticGlyphEl.style.visibility = 'hidden';
-    spinnerEl.style.transition = `transform ${duration / 1000}s ease-in-out`;
-    spinnerEl.style.transform = `translate3d(0, ${-targetIndex * 100}%, 0)`;
+    spinnerEl.style.transition = `transform ${duration}ms ease-in-out`;
+    spinnerEl.style.transform = `translate3d(0, ${-newBox.index * 100}%, 0)`;
 
-    staticGlyphEl.innerText = alphabet[targetIndex];
+    staticGlyphEl.innerText = newBox.char;
 
     timeout = setTimeout(() => {
       spinnerEl.style.transition = '';
@@ -44,7 +39,7 @@ export default function createSpinner(_value, _isActive, alphabet) {
       if (spinnerEl.parentElement === boxEl) boxEl.removeChild(spinnerEl);
     }, duration);
   }
-  setActive(_isActive);
+  setValue(initialBox, 0);
 
   function getEl() {
     return boxEl;
@@ -56,7 +51,7 @@ export default function createSpinner(_value, _isActive, alphabet) {
 
   return {
     getEl,
-    setActive,
+    setValue,
     destroy,
   };
 }

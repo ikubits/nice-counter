@@ -6,7 +6,7 @@ import createCounter from './counter';
 import { createEl } from './elements';
 
 class NiceCounter extends HTMLElement {
-  static observedAttributes = ['active'];
+  static observedAttributes = ['value'];
 
   connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: 'closed' });
@@ -20,7 +20,11 @@ class NiceCounter extends HTMLElement {
     styleEl.innerHTML = styles;
     shadowRoot.appendChild(styleEl);
 
-    const webc = createCounter(this.textContent.trim(), this.active);
+    const defaultValue = this.textContent.trim();
+    const patternValue = this.pattern ?? defaultValue;
+    const initialValue = this.value ?? defaultValue;
+
+    const webc = createCounter(patternValue, initialValue, defaultValue);
     shadowRoot.appendChild(webc.getRootEl());
 
     this._web_component = webc;
@@ -32,20 +36,22 @@ class NiceCounter extends HTMLElement {
 
   attributeChangedCallback(attr, oldValue, newValue) {
     if (this._web_component === undefined) return;
-    if (attr !== 'active') return;
+    if (attr !== 'value') return;
+    if (oldValue === newValue) return;
 
-    this._web_component.setActive(newValue !== null);
+    // console.log(`"${oldValue}" => "${newValue}"`);
+    this._web_component.setValue(newValue);
   }
 
-  get active() {
-    return this.getAttribute('active') !== null;
+  get value() {
+    return this.getAttribute('value');
   }
 
-  set active(value) {
-    if (value) {
-      this.setAttribute('active', '');
+  set value(counterValue = null) {
+    if (counterValue !== null) {
+      this.setAttribute('value', counterValue);
     } else {
-      this.removeAttribute('active');
+      this.removeAttribute('value');
     }
   }
 }

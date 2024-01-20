@@ -62,7 +62,6 @@
 
     <nice-counter
       id="nice-counter"
-      active
     >123456789.12</nice-counter>
 
     <button id="toggle">Toggle</button>
@@ -73,12 +72,8 @@
         const counterEl = document.getElementById('nice-counter');
         const toggleEl = document.getElementById('toggle');
 
-        let active = false;
         function onClick() {
-          active = !active;
-          // countUpEl.setAttribute('active', active);
-
-          counterEl.active = !counterEl.active;
+          counterEl.value = counterEl.value === null ? '' : null;
         }
 
         toggleEl.addEventListener('click', onClick);
