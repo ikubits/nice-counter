@@ -12,7 +12,7 @@ const scssConfig = (prod = false) => ({
 
 export default [
 	{
-		input: './src/main.js',
+		input: './src/js/main.js',
 		output: {
 			file: './dist/nice-counter.es.js',
 			format: 'es',
@@ -22,7 +22,7 @@ export default [
 		]
 	},
 	{
-		input: './src/main.js',
+		input: './src/js/main.js',
 		watch: {
 			include: './src/**'
 		},

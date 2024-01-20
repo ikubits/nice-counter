@@ -1,4 +1,4 @@
-import styles from './main.scss';
+import styles from '../scss/main.scss';
 
 const ALPHABET = '0123456789'.split('');
 
