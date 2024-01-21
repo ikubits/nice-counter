@@ -1,3 +1,4 @@
+import { easeInOutCubic } from './easing';
 import { BOX_TYPE } from './consts';
 import { createEl } from './elements';
 import createSpinner from './spinner';
@@ -68,6 +69,8 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
   const size = patternBoxes.length;
   let duration = options.duration ?? DURATION;
 
+  const ease = easeInOutCubic;
+
   const emptyBoxes = cloneBoxes(patternBoxes, (box) => ({
     ...box,
     char: box.type === BOX_TYPE.SPINNER
@@ -103,6 +106,57 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
   const effect = createEffect();
   rootEl.appendChild(effect.getEl());
 
+  // -- animation
+  function startTween(valueBoxes) {
+    for (let i = 0; i < size; i++) {
+      spinners[i].startTween(valueBoxes[i]);
+    }
+  }
+
+  function updateTween(progress) {
+    for (let i = 0; i < size; i++) {
+      spinners[i].updateTween(progress);
+    }
+  }
+
+  function endTween() {
+    for (let i = 0; i < size; i++) {
+      spinners[i].endTween();
+    }
+  }
+
+  // -- animation loop
+  let raf = null;
+  let startTime = 0;
+  let endTime = 0;
+
+  function tick(timestamp) {
+    if (timestamp >= endTime) {
+      updateTween(1);
+      endTween();
+      return;
+    }
+
+    updateTween(ease((timestamp - startTime) / duration));
+
+    raf = requestAnimationFrame(tick);
+  }
+
+  function firstTick(timestamp) {
+    startTime = timestamp;
+    endTime = startTime + duration;
+
+    tick(timestamp);
+  }
+
+  function startLoop() {
+    raf = requestAnimationFrame(firstTick);
+  }
+
+  function stopLoop() {
+    cancelAnimationFrame(raf);
+  }
+
   // -- methods
   /**
    * Animates to new value
@@ -117,9 +171,12 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
 
     if (!validateBoxes(patternBoxes, valueBoxes)) return;
 
-    for (let i = 0; i < size; i++) {
-      spinners[i].setValue(valueBoxes[i], duration);
-    }
+    // for (let i = 0; i < size; i++) {
+    //   spinners[i].setValue(valueBoxes[i], duration);
+    // }
+
+    startTween(valueBoxes);
+    startLoop();
   }
 
   /**
@@ -142,6 +199,8 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
    * Destroy clean up
    */
   function destroy() {
+    stopLoop();
+
     for (let i = 0; i < size; i++) {
       spinners[i].destroy();
     }
