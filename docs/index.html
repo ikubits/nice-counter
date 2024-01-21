@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1">
     <title>Docs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
   </head>
   <body>
+
     <style>
       html {
         min-height: 100%;
@@ -25,7 +29,8 @@
       #nice-counter {
         font-size: 54px;
         line-height: 1.2;
-        font-family: Verdana, Tahoma, sans-serif;
+        /* font-family: Verdana, Tahoma, sans-serif; */
+        font-family: 'Sacramento', cursive;
       }
 
       #static {
@@ -35,6 +40,7 @@
 
       #nice-counter {
         margin: 0 auto;
+        --nc-align-offset: 0.2em;
       }
 
       #toggle {
@@ -58,11 +64,11 @@
 
     <span
       id="static"
-    >123456789.12</span>
+    >123 456 789.12</span>
 
     <nice-counter
       id="nice-counter"
-    >123456789.12</nice-counter>
+    >123 456 789.12</nice-counter>
 
     <button id="toggle">Toggle</button>
 

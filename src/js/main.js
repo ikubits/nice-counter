@@ -3,7 +3,7 @@
 import styles from '../scss/main.scss';
 import createCounter from './counter';
 
-import { createEl } from './elements';
+// import { createEl } from './elements';
 
 class NiceCounter extends HTMLElement {
   static observedAttributes = ['value'];
@@ -11,14 +11,22 @@ class NiceCounter extends HTMLElement {
   connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: 'closed' });
 
+    // // css by internal link
     // const styleLinkEl = createEl('link', {
     //   rel: 'stylesheet',
     //   href: styles,
     // });
     // shadowRoot.appendChild(styleLinkEl);
-    const styleEl = createEl('style');
-    styleEl.innerHTML = styles;
-    shadowRoot.appendChild(styleEl);
+
+    // // css by internal style element
+    // const styleEl = createEl('style');
+    // styleEl.innerHTML = styles;
+    // shadowRoot.appendChild(styleEl);
+
+    // css by CSSStyleSheet
+    const styleSheet = new CSSStyleSheet();
+    styleSheet.replaceSync(styles);
+    shadowRoot.adoptedStyleSheets.push(styleSheet);
 
     const defaultValue = this.textContent.trim();
     const patternValue = this.pattern ?? defaultValue;
