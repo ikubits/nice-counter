@@ -64,6 +64,17 @@ function validateBoxes(patternBoxes, valueBoxes) {
   return true;
 }
 
+function getDirection(prevBoxes, nextBoxes) {
+  const size = prevBoxes.length;
+
+  for (let i = 0; i < size; i++) {
+    if (nextBoxes[i].index > prevBoxes[i].index) return 1;
+    if (nextBoxes[i].index < prevBoxes[i].index) return -1;
+  }
+
+  return 0;
+}
+
 export default function createCounter(patterValue, initialValue = '', defaultValue = '', options = {}) {
   const patternBoxes = parseValue(patterValue, ALPHABET);
   const size = patternBoxes.length;
@@ -87,6 +98,8 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
     ? parseValue(defaultValue, ALPHABET)
     : cloneBoxes(patternBoxes);
 
+  let lastBoxes = cloneBoxes(initialBoxes);
+
   // -- create root
   const rootEl = createEl('span', {
     class: 'nc',
@@ -107,9 +120,9 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
   rootEl.appendChild(effect.getEl());
 
   // -- animation
-  function startTween(valueBoxes) {
+  function startTween(valueBoxes, direction) {
     for (let i = 0; i < size; i++) {
-      spinners[i].startTween(valueBoxes[i]);
+      spinners[i].startTween(valueBoxes[i], direction);
     }
   }
 
@@ -171,8 +184,12 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
 
     if (!validateBoxes(patternBoxes, valueBoxes)) return;
 
-    startTween(valueBoxes);
+    const direction = getDirection(lastBoxes, valueBoxes);
+
+    startTween(valueBoxes, direction);
     startLoop();
+
+    lastBoxes = cloneBoxes(valueBoxes);
   }
 
   /**

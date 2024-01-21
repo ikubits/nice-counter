@@ -32,7 +32,7 @@ export default function createSpinner(initialBox, alphabet) {
     return ((index % size) + size) % size;
   }
 
-  function startTween(newBox) {
+  function startTween(newBox, direction) {
     if (spinnerEl === null) return;
 
     lastWidth = getClientWidth(staticGlyphEl);
@@ -44,8 +44,7 @@ export default function createSpinner(initialBox, alphabet) {
     staticGlyphEl.style.visibility = 'hidden';
     staticGlyphEl.innerText = newBox.char;
 
-    const sign = newBox.index >= lastIndex ? 1 : -1;
-    targetIndex = newBox.index + (newBox.spinnerIndex * size * sign);
+    targetIndex = newBox.index + (newBox.spinnerIndex * size * direction);
     targetWidth = getClientWidth(staticGlyphEl);
   }
 
@@ -72,7 +71,7 @@ export default function createSpinner(initialBox, alphabet) {
   }
 
   // set initial
-  startTween(initialBox);
+  startTween(initialBox, 1);
   updateTween(1);
   endTween();
 
