@@ -48,7 +48,7 @@
         --nc-align-offset: 0.2em;
       }
 
-      #toggle {
+      .button {
         margin-top: 40px;
         background-color: #323232;
         color: #f3f3f3;
@@ -61,8 +61,32 @@
         transition: background-color 0.2s;
       }
 
-      #toggle:hover {
+      .button:hover {
         background-color: #424242;
+      }
+
+      .range {
+        margin-top: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .range label {
+        display: block;
+        font-size: 20px;
+      }
+      .range input[type="range"] {
+        display: block;
+        width: 240px;
+        margin-top: 4px;
+      }
+      .range input[type="text"] {
+        display: block;
+        width: 120px;
+        font-size: 20px;
+        text-align: center;
+        margin-top: 10px;
       }
     </style>
 
@@ -77,7 +101,24 @@
         id="nice-counter"
       >123 456 789.12</nice-counter>
 
-      <button id="toggle">Toggle</button>
+      <button class="button" id="toggle">Toggle</button>
+
+      <div class="range">
+        <label for="duration">Duration</label>
+        <input
+          type="range"
+          id="duration-range"
+          min="0"
+          max="10000"
+          value="1000"
+          step="100"
+        />
+        <input
+          type="text"
+          id="duration-value"
+          value="1000"
+        />
+      </div>
     </div>
 
     <script type="module" src="../dist/nice-counter.es.js"></script>
@@ -85,12 +126,30 @@
       (function(){
         const counterEl = document.getElementById('nice-counter');
         const toggleEl = document.getElementById('toggle');
+        const durationRangeEl = document.getElementById('duration-range');
+        const durationValueEl = document.getElementById('duration-value');
 
         function onClick() {
           counterEl.value = counterEl.value === null ? '' : null;
         }
 
+        function onRangeChange() {
+          durationValueEl.value = durationRangeEl.value;
+          updateDuration();
+        }
+
+        function onValueChange() {
+          durationRangeEl.value = durationValueEl.value;
+          updateDuration();
+        }
+
+        function updateDuration() {
+          counterEl.duration = durationRangeEl.value;
+        }
+
         toggleEl.addEventListener('click', onClick);
+        durationRangeEl.addEventListener('input', onRangeChange);
+        durationValueEl.addEventListener('change', onValueChange);
       })();
     </script>
   </body>
