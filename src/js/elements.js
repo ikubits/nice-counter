@@ -1,3 +1,9 @@
+/**
+ * Create new element with optional attributes
+ * @param {string} tagName tag name
+ * @param {object} attrs { attrName: attrValue }
+ * @returns {element} created element
+ */
 export function createEl(tagName, attrs = {}) {
   // element
   const el = document.createElement(tagName);
@@ -10,6 +16,12 @@ export function createEl(tagName, attrs = {}) {
   return el;
 }
 
+/**
+ * Create new glyph element
+ * @param {string} value element innerText
+ * @param {boolean} isStatic determine element classes
+ * @returns {element} created element
+ */
 export function createGlyphEl(value, isStatic = false) {
   const glyphEl = createEl('span', {
     class: `nc__glyph${isStatic ? ' nc__glyph--static' : ''}`,
@@ -20,6 +32,11 @@ export function createGlyphEl(value, isStatic = false) {
   return glyphEl;
 }
 
+/**
+ * Create new spinner element
+ * @param {string[]} alphabet array of chars
+ * @returns {element} created element
+ */
 export function createSpinnerEl(alphabet) {
   const spinnerEl = createEl('span', {
     class: 'nc__spinner',

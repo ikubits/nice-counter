@@ -3,6 +3,7 @@ import { createEl } from './elements';
 import createSpinner from './spinner';
 
 const ALPHABET = '0123456789'.split('');
+const DURATION = 1000;
 
 function parseValue(value, alphabet) {
   const valueChars = value.split('');
@@ -61,9 +62,10 @@ function validateBoxes(patternBoxes, valueBoxes) {
   return true;
 }
 
-export default function createCounter(patterValue, initialValue = '', defaultValue = '') {
+export default function createCounter(patterValue, initialValue = '', defaultValue = '', options = {}) {
   const patternBoxes = parseValue(patterValue, ALPHABET);
   const size = patternBoxes.length;
+  let duration = options.duration ?? DURATION;
 
   const emptyBoxes = cloneBoxes(patternBoxes, (box) => ({
     ...box,
@@ -96,6 +98,11 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
   rootEl.appendChild(fragment);
 
   // -- methods
+  /**
+   * Animates to new value
+   * @param {object} newBox counter box object
+   * @param {number} duration animation duration
+   */
   function setValue(value) {
     let valueBoxes;
     if (value === null) valueBoxes = defaultBoxes;
@@ -105,14 +112,29 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
     if (!validateBoxes(patternBoxes, valueBoxes)) return;
 
     for (let i = 0; i < size; i++) {
-      spinners[i].setValue(valueBoxes[i]);
+      spinners[i].setValue(valueBoxes[i], duration);
     }
   }
 
+  /**
+   * Sets new animation duration
+   * @param {number} newDuration animation duration
+   */
+  function setDuration(newDuration) {
+    duration = parseInt(newDuration === '' ? 0 : (newDuration ?? DURATION), 10);
+  }
+
+  /**
+   * Returns counter root element
+   * @returns {element} counter root element
+   */
   function getRootEl() {
     return rootEl;
   }
 
+  /**
+   * Destroy clean up
+   */
   function destroy() {
     for (let i = 0; i < size; i++) {
       spinners[i].destroy();
@@ -122,6 +144,7 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
   return {
     getRootEl,
     setValue,
+    setDuration,
     destroy,
   };
 }

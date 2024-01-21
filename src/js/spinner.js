@@ -21,6 +21,11 @@ export default function createSpinner(initialBox, alphabet) {
     : null;
 
   // -- methods
+  /**
+   * Animates to new value
+   * @param {object} newBox counter box object
+   * @param {number} duration animation duration
+   */
   function setValue(newBox, duration = 1000) {
     if (spinnerEl === null) return;
 
@@ -51,10 +56,17 @@ export default function createSpinner(initialBox, alphabet) {
   }
   setValue(initialBox, 0);
 
+  /**
+   * Returns counter box element
+   * @returns {element} counter box element
+   */
   function getEl() {
     return boxEl;
   }
 
+  /**
+   * Destroy clean up
+   */
   function destroy() {
     clearTimeout(timeout);
   }

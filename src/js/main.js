@@ -6,7 +6,7 @@ import createCounter from './counter';
 // import { createEl } from './elements';
 
 class NiceCounter extends HTMLElement {
-  static observedAttributes = ['value'];
+  static observedAttributes = ['value', 'duration'];
 
   connectedCallback() {
     const shadowRoot = this.attachShadow({ mode: 'closed' });
@@ -32,7 +32,9 @@ class NiceCounter extends HTMLElement {
     const patternValue = this.pattern ?? defaultValue;
     const initialValue = this.value ?? defaultValue;
 
-    const webc = createCounter(patternValue, initialValue, defaultValue);
+    const webc = createCounter(patternValue, initialValue, defaultValue, {
+      duration: this.duration,
+    });
     shadowRoot.appendChild(webc.getRootEl());
 
     this._web_component = webc;
@@ -44,22 +46,42 @@ class NiceCounter extends HTMLElement {
 
   attributeChangedCallback(attr, oldValue, newValue) {
     if (this._web_component === undefined) return;
-    if (attr !== 'value') return;
     if (oldValue === newValue) return;
 
-    // console.log(`"${oldValue}" => "${newValue}"`);
-    this._web_component.setValue(newValue);
+    switch (attr) {
+      case 'value':
+        this._web_component.setValue(newValue);
+        break;
+
+      case 'duration':
+        this._web_component.setDuration(newValue);
+        break;
+
+      default: break;
+    }
   }
 
   get value() {
     return this.getAttribute('value');
   }
 
-  set value(counterValue = null) {
-    if (counterValue !== null) {
-      this.setAttribute('value', counterValue);
+  set value(newValue = null) {
+    if (newValue !== null) {
+      this.setAttribute('value', newValue);
     } else {
       this.removeAttribute('value');
+    }
+  }
+
+  get duration() {
+    return this.getAttribute('duration');
+  }
+
+  set duration(newDuration = null) {
+    if (newDuration !== null) {
+      this.setAttribute('duration', newDuration);
+    } else {
+      this.removeAttribute('duration');
     }
   }
 }
