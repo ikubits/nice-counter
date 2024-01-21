@@ -130,6 +130,9 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
     for (let i = 0; i < size; i++) {
       spinners[i].updateTween(progress);
     }
+
+    const blur = 10 * Math.sin(progress * Math.PI);
+    effect.setValue(blur);
   }
 
   function endTween() {

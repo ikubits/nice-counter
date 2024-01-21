@@ -1,4 +1,4 @@
-import { SVG_NS } from './consts';
+const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /**
  * Create new svg element with optional attributes
@@ -12,7 +12,6 @@ export function createSvgEl(tagName, attrs = {}) {
 
   // attributes
   Object.keys(attrs).forEach((key) => {
-    // el.setAttributeNS(SVG_NS, key, attrs[key]);
     el.setAttribute(key, attrs[key]);
   });
 

@@ -1,4 +1,3 @@
-import { SVG_NS } from './consts';
 import { createSvgEl } from './elements';
 
 export default function createEffect() {
@@ -12,7 +11,7 @@ export default function createEffect() {
     id: 'nc-effect',
   });
   const blurEl = createSvgEl('feGaussianBlur', {
-    stdDeviation: '0 5',
+    stdDeviation: '0 0',
   });
 
   filterEl.appendChild(blurEl);
@@ -23,7 +22,7 @@ export default function createEffect() {
    * @param {number} newValue filter strength
    */
   function setValue(newValue) {
-    blurEl.setAttributeNS(SVG_NS, 'stdDeviation', `0 ${newValue}`);
+    blurEl.setAttribute('stdDeviation', `0 ${newValue}`);
   }
 
   /**
