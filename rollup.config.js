@@ -2,6 +2,9 @@ import eslint from '@rollup/plugin-eslint';
 import terser from '@rollup/plugin-terser';
 import scss from 'rollup-plugin-scss';
 
+const inputFile = './src/js/main.js';
+const outputFile = (suffix = '') => `./dist/nice-counter${suffix}.js`;
+
 const scssConfig = (prod = false) => ({
   include: ['/**/*.css', '/**/*.scss', '/**/*.sass'],
   // output: './dist/nice-counter.css',
@@ -13,10 +16,11 @@ const scssConfig = (prod = false) => ({
 
 export default [
   {
-    input: './src/js/main.js',
+    input: inputFile,
     output: {
-      file: './dist/nice-counter.es.js',
+      file: outputFile('.es'),
       format: 'es',
+      sourcemap: true,
     },
     plugins: [
       eslint(),
@@ -24,13 +28,40 @@ export default [
     ],
   },
   {
-    input: './src/js/main.js',
+    input: inputFile,
     watch: {
       include: './src/**',
     },
     output: {
-      file: './dist/nice-counter.es.min.js',
+      file: outputFile('.es.min'),
       format: 'es',
+      plugins: [terser()],
+    },
+    plugins: [
+      eslint(),
+      scss(scssConfig(true)),
+    ],
+  },
+  {
+    input: inputFile,
+    output: {
+      file: outputFile('.iife'),
+      format: 'iife',
+      sourcemap: true,
+    },
+    plugins: [
+      eslint(),
+      scss(scssConfig()),
+    ],
+  },
+  {
+    input: inputFile,
+    watch: {
+      include: './src/**',
+    },
+    output: {
+      file: outputFile('.iife.min'),
+      format: 'iife',
       plugins: [terser()],
     },
     plugins: [

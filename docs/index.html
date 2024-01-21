@@ -25,26 +25,30 @@
         overflow-x: clip;
       }
 
-      #static,
-      #nice-counter {
+      .content {
+        margin: auto;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .number {
         font-size: 54px;
         line-height: 1.2;
         /* font-family: Verdana, Tahoma, sans-serif; */
         font-family: 'Sacramento', cursive;
       }
 
-      #static {
-        margin: auto;
-        margin-bottom: 30px;
+      .number + .number {
+        margin-top: 30px;
       }
 
       #nice-counter {
-        margin: 0 auto;
         --nc-align-offset: 0.2em;
       }
 
       #toggle {
-        margin: auto;
         margin-top: 40px;
         background-color: #323232;
         color: #f3f3f3;
@@ -62,15 +66,19 @@
       }
     </style>
 
-    <span
-      id="static"
-    >123 456 789.12</span>
+    <div class="content">
+      <span
+        class="number"
+        id="static"
+      >123 456 789.12</span>
 
-    <nice-counter
-      id="nice-counter"
-    >123 456 789.12</nice-counter>
+      <nice-counter
+        class="number"
+        id="nice-counter"
+      >123 456 789.12</nice-counter>
 
-    <button id="toggle">Toggle</button>
+      <button id="toggle">Toggle</button>
+    </div>
 
     <script type="module" src="../dist/nice-counter.es.js"></script>
     <script type="module">
