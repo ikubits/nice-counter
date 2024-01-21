@@ -171,10 +171,6 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
 
     if (!validateBoxes(patternBoxes, valueBoxes)) return;
 
-    // for (let i = 0; i < size; i++) {
-    //   spinners[i].setValue(valueBoxes[i], duration);
-    // }
-
     startTween(valueBoxes);
     startLoop();
   }
