@@ -2,6 +2,7 @@
   $align-offset: var(--nc-align-offset, 0em);
   $inline-padding: var(--nc-inline-padding, 0.3em);
 
+  position: relative;
   display: inline-flex;
   overflow: hidden;
   line-height: 1;
@@ -25,6 +26,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    // filter: url(#nc-effect);
   }
 
   &__glyph {
@@ -35,5 +37,14 @@
     &:not(&--static) {
       user-select: none;
     }
+  }
+
+  &__effect {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    visibility: hidden;
   }
 }

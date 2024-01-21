@@ -1,6 +1,7 @@
 import { BOX_TYPE } from './consts';
 import { createEl } from './elements';
 import createSpinner from './spinner';
+import createEffect from './effect';
 
 const ALPHABET = '0123456789'.split('');
 const DURATION = 1000;
@@ -83,11 +84,12 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
     ? parseValue(defaultValue, ALPHABET)
     : cloneBoxes(patternBoxes);
 
-  // -- create
+  // -- create root
   const rootEl = createEl('span', {
     class: 'nc',
   });
 
+  // -- create spinners
   const fragment = document.createDocumentFragment();
   const spinners = [];
   for (let i = 0; i < size; i++) {
@@ -96,6 +98,10 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
     fragment.appendChild(spinner.getEl());
   }
   rootEl.appendChild(fragment);
+
+  // -- create effect
+  const effect = createEffect();
+  rootEl.appendChild(effect.getEl());
 
   // -- methods
   /**

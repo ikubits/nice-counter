@@ -1,3 +1,24 @@
+import { SVG_NS } from './consts';
+
+/**
+ * Create new svg element with optional attributes
+ * @param {string} tagName tag name
+ * @param {object} attrs { attrName: attrValue }
+ * @returns {element} created element
+ */
+export function createSvgEl(tagName, attrs = {}) {
+  // element
+  const el = document.createElementNS(SVG_NS, tagName);
+
+  // attributes
+  Object.keys(attrs).forEach((key) => {
+    // el.setAttributeNS(SVG_NS, key, attrs[key]);
+    el.setAttribute(key, attrs[key]);
+  });
+
+  return el;
+}
+
 /**
  * Create new element with optional attributes
  * @param {string} tagName tag name
