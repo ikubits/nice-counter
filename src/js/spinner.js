@@ -6,7 +6,10 @@ function getClientWidth(el) {
   return el.getBoundingClientRect().width;
 }
 
-export default function createSpinner(initialBox, alphabet) {
+export default function createSpinner(signature, alphabet) {
+  let alive = true;
+  const { type } = signature;
+
   const boxEl = createEl('span', {
     class: 'nc__box',
   });
@@ -14,10 +17,10 @@ export default function createSpinner(initialBox, alphabet) {
   const size = alphabet.length;
 
   // -- create
-  const staticGlyphEl = createGlyphEl(initialBox.char, true);
+  const staticGlyphEl = createGlyphEl(signature.char, true);
   boxEl.appendChild(staticGlyphEl);
 
-  const spinnerEl = initialBox.type === BOX_TYPE.SPINNER
+  const spinnerEl = type === BOX_TYPE.SPINNER
     ? createSpinnerEl(alphabet)
     : null;
 
@@ -32,19 +35,17 @@ export default function createSpinner(initialBox, alphabet) {
     return ((index % size) + size) % size;
   }
 
-  function startTween(newBox, direction) {
+  function startTween(nextSignature, direction) {
     if (spinnerEl === null) return;
 
     lastWidth = getClientWidth(staticGlyphEl);
     boxEl.style.width = `${lastWidth}px`;
     boxEl.appendChild(spinnerEl);
-    // eslint-disable-next-line no-unused-expressions
-    spinnerEl.offsetWidth; // force reflow
 
     staticGlyphEl.style.visibility = 'hidden';
-    staticGlyphEl.innerText = newBox.char;
+    staticGlyphEl.innerText = nextSignature.char;
 
-    targetIndex = newBox.index + (newBox.spinnerIndex * size * direction);
+    targetIndex = nextSignature.index + (nextSignature.spinnerIndex * size * direction);
     targetWidth = getClientWidth(staticGlyphEl);
   }
 
@@ -71,7 +72,7 @@ export default function createSpinner(initialBox, alphabet) {
   }
 
   // set initial
-  startTween(initialBox, 1);
+  startTween(signature, 1);
   updateTween(1);
   endTween();
 
@@ -87,7 +88,14 @@ export default function createSpinner(initialBox, alphabet) {
    * Destroy clean up
    */
   function destroy() {
+    alive = false;
+  }
 
+  /**
+   * Chack is spinner alive
+   */
+  function isAlive() {
+    return alive;
   }
 
   return {
@@ -96,5 +104,6 @@ export default function createSpinner(initialBox, alphabet) {
     updateTween,
     endTween,
     destroy,
+    isAlive,
   };
 }

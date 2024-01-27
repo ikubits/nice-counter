@@ -7,7 +7,7 @@ import createEffect from './effect';
 const ALPHABET = '0123456789'.split('');
 const DURATION = 1000;
 
-function parseValue(value, alphabet) {
+function getSignature(value, alphabet, empty) {
   const valueChars = value.split('');
   const size = valueChars.length;
 
@@ -16,89 +16,56 @@ function parseValue(value, alphabet) {
   const boxes = [];
   for (let i = 0; i < size; i++) {
     const char = valueChars[i];
-    const boxState = {};
 
     const index = alphabet.indexOf(char);
     const isSpinner = index !== -1;
-    boxState.type = isSpinner;
-    boxState.index = index;
 
     boxes[i] = {
       type: isSpinner ? BOX_TYPE.SPINNER : BOX_TYPE.STATIC,
-      char,
-      index: isSpinner ? index : 0,
+      char: (isSpinner && empty) ? alphabet[0] : char,
+      index: (isSpinner && !empty) ? index : 0,
       spinnerIndex,
     };
 
     if (isSpinner) spinnerIndex += 1;
   }
 
+  let spinnerKey = 0;
+  let staticKey = 0;
+
+  for (let i = size - 1; i >= 0; i--) {
+    if (boxes[i].type === BOX_TYPE.SPINNER) boxes[i].key = spinnerKey++;
+    else if (boxes[i].type === BOX_TYPE.STATIC) boxes[i].key = staticKey++;
+  }
+
   return boxes;
 }
 
-function cloneBoxes(boxes, changeFn = (box) => box) {
-  const newBoxes = [];
-  const size = boxes.length;
-  for (let i = 0; i < size; i++) {
-    newBoxes[i] = changeFn({ ...boxes[i] }, i);
-  }
-  return newBoxes;
-}
+function getDirection(prevSignature, nextSignature) {
+  const prevLength = prevSignature.length;
+  const nextLength = nextSignature.length;
 
-function validateBoxes(patternBoxes, valueBoxes) {
-  const patternSize = patternBoxes.length;
-  const valueSize = valueBoxes.length;
-
-  if (valueSize !== patternSize) {
-    console.warn('Mismatch length');
-    return false;
+  const l = Math.min(prevLength, nextLength);
+  for (let i = 0; i < l; i++) {
+    if (nextSignature[i].index > prevSignature[i].index) return 1;
+    if (nextSignature[i].index < prevSignature[i].index) return -1;
   }
 
-  for (let i = 0; i < patternSize; i++) {
-    if (valueBoxes[i].type !== patternBoxes[i].type) {
-      console.warn('Mismatch pattern');
-      return false;
-    }
-  }
-
-  return true;
-}
-
-function getDirection(prevBoxes, nextBoxes) {
-  const size = prevBoxes.length;
-
-  for (let i = 0; i < size; i++) {
-    if (nextBoxes[i].index > prevBoxes[i].index) return 1;
-    if (nextBoxes[i].index < prevBoxes[i].index) return -1;
-  }
+  if (nextLength > prevLength) return 1;
+  if (nextLength < prevLength) return -1;
 
   return 0;
 }
 
-export default function createCounter(patterValue, initialValue = '', defaultValue = '', options = {}) {
-  const patternBoxes = parseValue(patterValue, ALPHABET);
-  const size = patternBoxes.length;
+export default function createCounter(initialValue = '', defaultValue = '', options = {}) {
+  const defaultSignature = getSignature(defaultValue, ALPHABET);
+  const emptySignature = getSignature(defaultValue, ALPHABET, true);
+  let prevSignature = getSignature(initialValue, ALPHABET);
+  let spinners = [];
+
   let duration = options.duration ?? DURATION;
 
   const ease = easeInOutCubic;
-
-  const emptyBoxes = cloneBoxes(patternBoxes, (box) => ({
-    ...box,
-    char: box.type === BOX_TYPE.SPINNER
-      ? ALPHABET[0]
-      : box.char,
-    index: 0,
-  }));
-
-  const initialBoxes = initialValue !== ''
-    ? parseValue(initialValue, ALPHABET)
-    : cloneBoxes(emptyBoxes);
-
-  const defaultBoxes = defaultValue !== ''
-    ? parseValue(defaultValue, ALPHABET)
-    : cloneBoxes(patternBoxes);
-
-  let lastBoxes = cloneBoxes(initialBoxes);
 
   // -- create root
   const rootEl = createEl('span', {
@@ -107,11 +74,13 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
 
   // -- create spinners
   const fragment = document.createDocumentFragment();
-  const spinners = [];
-  for (let i = 0; i < size; i++) {
-    const spinner = createSpinner(initialBoxes[i], ALPHABET);
-    spinners.push(spinner);
-    fragment.appendChild(spinner.getEl());
+  {
+    const size = prevSignature.length;
+    for (let i = 0; i < size; i++) {
+      const spinner = createSpinner(prevSignature[i], ALPHABET);
+      spinners.push(spinner);
+      fragment.appendChild(spinner.getEl());
+    }
   }
   rootEl.appendChild(fragment);
 
@@ -119,26 +88,37 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
   const effect = createEffect();
   rootEl.appendChild(effect.getEl());
 
-  // -- animation
-  function startTween(valueBoxes, direction) {
+  function eachSpinner(callback) {
+    const size = spinners.length;
     for (let i = 0; i < size; i++) {
-      spinners[i].startTween(valueBoxes[i], direction);
+      callback(spinners[i], i);
     }
   }
 
+  // -- animation
+  function startTween(nextSignature, direction) {
+    // spinners = spinners.filter((spinner) => spinner.isAlive());
+
+    eachSpinner((spinner, index) => {
+      spinner.startTween(nextSignature[index], direction);
+    });
+  }
+
   function updateTween(progress) {
-    for (let i = 0; i < size; i++) {
-      spinners[i].updateTween(progress);
-    }
+    eachSpinner((spinner) => {
+      spinner.updateTween(progress);
+    });
 
     const blur = 10 * Math.sin(progress * Math.PI);
     effect.setValue(blur);
   }
 
   function endTween() {
-    for (let i = 0; i < size; i++) {
-      spinners[i].endTween();
-    }
+    eachSpinner((spinner) => {
+      spinner.endTween();
+    });
+
+    spinners = spinners.filter((spinner) => !spinner.isDestroyed);
   }
 
   // -- animation loop
@@ -180,19 +160,17 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
    * @param {number} duration animation duration
    */
   function setValue(value) {
-    let valueBoxes;
-    if (value === null) valueBoxes = defaultBoxes;
-    else if (value === '') valueBoxes = emptyBoxes;
-    else valueBoxes = parseValue(value, ALPHABET);
+    let nextSignature;
+    if (value === null) nextSignature = defaultSignature;
+    else if (value === '') nextSignature = emptySignature;
+    else nextSignature = getSignature(value, ALPHABET);
 
-    if (!validateBoxes(patternBoxes, valueBoxes)) return;
+    const direction = getDirection(prevSignature, nextSignature);
 
-    const direction = getDirection(lastBoxes, valueBoxes);
-
-    startTween(valueBoxes, direction);
+    startTween(nextSignature, direction);
     startLoop();
 
-    lastBoxes = cloneBoxes(valueBoxes);
+    prevSignature = nextSignature;
   }
 
   /**
@@ -217,9 +195,9 @@ export default function createCounter(patterValue, initialValue = '', defaultVal
   function destroy() {
     stopLoop();
 
-    for (let i = 0; i < size; i++) {
-      spinners[i].destroy();
-    }
+    eachSpinner((spinner) => {
+      spinner.destroy();
+    });
   }
 
   return {
