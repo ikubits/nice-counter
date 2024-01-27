@@ -5,7 +5,7 @@ import createCounter from './counter';
 
 // import { createEl } from './elements';
 
-class NiceCounter extends HTMLElement {
+export default class NiceCounter extends HTMLElement {
   static observedAttributes = ['value', 'duration'];
 
   connectedCallback() {
