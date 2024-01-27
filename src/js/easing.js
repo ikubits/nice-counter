@@ -77,11 +77,8 @@ export function cubicBezier(p1, c1, c2, p2, f) {
  * @returns {function}
  */
 export function getEaseBazier(c1, c2) {
-  const p1 = 0;
-  const p2 = 1;
-
   return function easeBazier(f) {
-    return cubicBezierAxis(p1, c1, c2, p2, f);
+    return cubicBezierAxis(0, c1, c2, 1, f);
   };
 }
 

@@ -39,12 +39,14 @@ export function createEl(tagName, attrs = {}) {
 /**
  * Create new glyph element
  * @param {string} value element innerText
- * @param {boolean} isStatic determine element classes
+ * @param {string} mod element class name modificator
  * @returns {element} created element
  */
-export function createGlyphEl(value, isStatic = false) {
+export function createGlyphEl(value, mod = '') {
+  const modClass = mod !== '' ? ` nc__glyph--${mod}` : '';
+
   const glyphEl = createEl('span', {
-    class: `nc__glyph${isStatic ? ' nc__glyph--static' : ''}`,
+    class: `nc__glyph${modClass}`,
   });
 
   glyphEl.innerText = value;

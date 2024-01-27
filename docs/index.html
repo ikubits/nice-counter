@@ -48,8 +48,14 @@
         --nc-align-offset: 0.2em;
       }
 
-      .button {
+      .buttons {
         margin-top: 40px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .button {
         background-color: #323232;
         color: #f3f3f3;
         font-size: 20px;
@@ -101,7 +107,10 @@
         id="nice-counter"
       >123 456 789.12</nice-counter>
 
-      <button class="button" id="toggle">Toggle</button>
+      <div class="buttons">
+        <button class="button" id="toggle">Toggle</button>
+        <button class="button" id="set">987 654 321.98</button>
+      </div>
 
       <div class="range">
         <label for="duration">Duration</label>
@@ -126,11 +135,16 @@
       (function(){
         const counterEl = document.getElementById('nice-counter');
         const toggleEl = document.getElementById('toggle');
+        const setEl = document.getElementById('set');
         const durationRangeEl = document.getElementById('duration-range');
         const durationValueEl = document.getElementById('duration-value');
 
-        function onClick() {
+        function onToggleClick() {
           counterEl.value = counterEl.value === null ? '' : null;
+        }
+
+        function onSetClick() {
+          counterEl.value = '987 654 321+98';
         }
 
         function onRangeChange() {
@@ -147,7 +161,8 @@
           counterEl.duration = durationRangeEl.value;
         }
 
-        toggleEl.addEventListener('click', onClick);
+        toggleEl.addEventListener('click', onToggleClick);
+        setEl.addEventListener('click', onSetClick);
         durationRangeEl.addEventListener('input', onRangeChange);
         durationValueEl.addEventListener('change', onValueChange);
       })();
