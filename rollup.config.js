@@ -2,10 +2,11 @@ import eslint from '@rollup/plugin-eslint';
 import terser from '@rollup/plugin-terser';
 import scss from 'rollup-plugin-scss';
 
+const watchPath = './src/**';
 const inputFile = './src/js/main.js';
 const outputFile = (suffix = '') => `./dist/nice-counter${suffix}.js`;
 
-const scssConfig = (prod = false) => ({
+const getScssConfig = (prod = false) => ({
   include: ['/**/*.css', '/**/*.scss', '/**/*.sass'],
   // output: './dist/nice-counter.css',
   // sourceMap: !prod,
@@ -14,59 +15,35 @@ const scssConfig = (prod = false) => ({
   failOnError: true,
 });
 
+const getPlugins = (prod = false) => ([
+  eslint(),
+  scss(getScssConfig(prod)),
+]);
+
 export default [
-  {
-    input: inputFile,
-    output: {
-      file: outputFile('.es'),
-      format: 'es',
-      sourcemap: true,
-    },
-    plugins: [
-      eslint(),
-      scss(scssConfig()),
-    ],
+  { format: 'es', suffix: '.es', prod: false },
+  { format: 'es', suffix: '.es.min', prod: true },
+  { format: 'cjs', suffix: '.cjs', prod: false },
+  { format: 'cjs', suffix: '.cjs.min', prod: true },
+  { format: 'iife', suffix: '.iife', prod: false },
+  { format: 'iife', suffix: '.iife.min', prod: true },
+].map((config) => ((config.prod === true) ? ({
+  input: inputFile,
+  output: {
+    file: outputFile(config.suffix),
+    format: config.format,
+    plugins: [terser()],
   },
-  {
-    input: inputFile,
-    watch: {
-      include: './src/**',
-    },
-    output: {
-      file: outputFile('.es.min'),
-      format: 'es',
-      plugins: [terser()],
-    },
-    plugins: [
-      eslint(),
-      scss(scssConfig(true)),
-    ],
+  plugins: getPlugins(true),
+}) : ({
+  input: inputFile,
+  watch: {
+    include: watchPath,
   },
-  {
-    input: inputFile,
-    output: {
-      file: outputFile('.iife'),
-      format: 'iife',
-      sourcemap: true,
-    },
-    plugins: [
-      eslint(),
-      scss(scssConfig()),
-    ],
+  output: {
+    file: outputFile(config.suffix),
+    format: config.format,
+    sourcemap: true,
   },
-  {
-    input: inputFile,
-    watch: {
-      include: './src/**',
-    },
-    output: {
-      file: outputFile('.iife.min'),
-      format: 'iife',
-      plugins: [terser()],
-    },
-    plugins: [
-      eslint(),
-      scss(scssConfig(true)),
-    ],
-  },
-];
+  plugins: getPlugins(),
+})));

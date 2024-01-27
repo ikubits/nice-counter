@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "Web component form animated value count up",
   "type": "module",
-  "main": "dist/nice-counter.es.min.js",
+  "main": "dist/nice-counter.es.js",
+  "module": "dist/nice-counter.es.js",
+  "exports": {
+    "./es": "./dist/nice-counter.es.js",
+    "./cjs": "./dist/nice-counter.cjs.js",
+    "./iife": "./dist/nice-counter.iife.js"
+  },
   "scripts": {
     "start": "npm run watch",
     "watch": "rollup --config --watch",
