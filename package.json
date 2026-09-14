@@ -1,7 +1,7 @@
 {
   "name": "nice-counter",
   "version": "1.0.0",
-  "description": "Web component form animated value count up",
+  "description": "An Odometer.js-inspired animated counter Web Component with smooth easing and motion blur effect",
   "type": "module",
   "main": "dist/nice-counter.es.js",
   "module": "dist/nice-counter.es.js",
