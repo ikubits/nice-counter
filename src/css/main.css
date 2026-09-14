@@ -1,0 +1,52 @@
+.nc {
+  /* Default values */
+  --nc-align-offset: 0em;
+  --nc-inline-padding: 0.3em;
+
+  position: relative;
+  display: inline-flex;
+  overflow: hidden;
+  line-height: 1;
+  margin-inline: calc(-1 * var(--nc-inline-padding));
+  padding-inline: var(--nc-inline-padding);
+  transform: translateY(calc(-1 * var(--nc-align-offset)));
+}
+
+.nc__box {
+  flex-shrink: 0;
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  transform: translateY(var(--nc-align-offset));
+}
+
+.nc__spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  filter: url(#nc-effect);
+}
+
+.nc__glyph {
+  flex-shrink: 0;
+  display: block;
+  text-align: center;
+  white-space: pre;
+}
+
+.nc__glyph:not(.nc__glyph--static) {
+  user-select: none;
+}
+
+.nc__effect {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  visibility: hidden;
+}

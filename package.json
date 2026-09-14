@@ -11,10 +11,10 @@
     "./iife": "./dist/nice-counter.iife.js"
   },
   "scripts": {
-    "start": "npm run watch",
-    "watch": "rollup --config --watch",
-    "build": "rollup --config",
-    "serve": "serve ."
+    "dev": "vite",
+    "build": "vite build && vite build --config vite.demo.config.js",
+    "preview": "vite preview",
+    "lint": "eslint src/"
   },
   "keywords": [
     "counter",
@@ -26,12 +26,10 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@rollup/plugin-eslint": "^9.0.5",
-    "@rollup/plugin-terser": "^0.4.4",
+    "@tailwindcss/vite": "^4.3.3",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "rollup": "^4.9.5",
-    "rollup-plugin-scss": "^4.0.0",
-    "sass": "^1.70.0"
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.3.0"
   }
 }

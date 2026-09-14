@@ -9,8 +9,6 @@ module.exports = {
   parser: '@babel/eslint-parser',
   parserOptions: {
     requireConfigFile: false,
-    // ecmaVersion: 12,
-    // sourceType: 'module',
   },
   rules: {
     'no-plusplus': 'off',
@@ -18,4 +16,17 @@ module.exports = {
     'no-console': 'off',
     'no-unused-vars': ['error', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
   },
+  overrides: [
+    {
+      files: ['*.config.js', '.eslintrc.cjs'],
+      env: {
+        node: true,
+      },
+      rules: {
+        'import/no-unresolved': 'off',
+        'import/no-extraneous-dependencies': 'off',
+        'no-underscore-dangle': 'off',
+      },
+    },
+  ],
 };

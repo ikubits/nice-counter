@@ -1,6 +1,7 @@
 /* eslint no-underscore-dangle: ["error", { "allow": ["_web_component"] }] */
+/* eslint-disable import/no-unresolved */
 
-import styles from '../scss/main.scss';
+import styles from '../css/main.css?inline';
 import createCounter from './counter';
 
 // import { createEl } from './elements';

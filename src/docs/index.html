@@ -6,7 +6,7 @@
     <title>Docs</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" crossorigin href="./assets/index.css">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body class="flex flex-col min-h-screen bg-gray-50">
     <div class="content flex flex-col items-center justify-center mx-auto text-center">
@@ -45,45 +45,7 @@
       </div>
     </div>
 
-    <script type="module" src="./nice-counter.es.js"></script>
-    
-    <script type="module">
-      (function(){
-        const counterEl = document.getElementById('nice-counter');
-        const toggleEl = document.getElementById('toggle');
-        const setEl = document.getElementById('set');
-        const durationRangeEl = document.getElementById('duration-range');
-        const durationValueEl = document.getElementById('duration-value');
-
-        function onToggleClick() {
-          counterEl.value = counterEl.value === null ? '' : null;
-        }
-
-        function onSetClick() {
-          counterEl.value = '987-654-321.98';
-          // counterEl.value = '987-654.45';
-        }
-
-        function onRangeChange() {
-          durationValueEl.value = durationRangeEl.value;
-          updateDuration();
-        }
-
-        function onValueChange() {
-          durationRangeEl.value = durationValueEl.value;
-          updateDuration();
-        }
-
-        function updateDuration() {
-          counterEl.duration = durationRangeEl.value;
-        }
-
-        toggleEl.addEventListener('click', onToggleClick);
-        setEl.addEventListener('click', onSetClick);
-        durationRangeEl.addEventListener('input', onRangeChange);
-        durationValueEl.addEventListener('change', onValueChange);
-      })();
-    </script>
-
+    <!-- LIBRARY_SCRIPT -->
+    <!-- DEMO_SCRIPT -->
   </body>
 </html>
