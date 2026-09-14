@@ -8,7 +8,7 @@ function getAccurateWidth(el) {
 
 export default function createSpinner(signature, alphabet) {
   let alive = true;
-  const { type } = signature;
+  const { type, key } = signature;
   const isSpinner = type === BOX_TYPE.SPINNER;
 
   const boxEl = createEl('span', {
@@ -111,6 +111,14 @@ export default function createSpinner(signature, alphabet) {
   }
 
   /**
+   * Returns spinner key
+   * @returns {string} spinner key
+   */
+  function getKey() {
+    return key;
+  }
+
+  /**
    * Destroy clean up
    */
   function destroy() {
@@ -126,6 +134,7 @@ export default function createSpinner(signature, alphabet) {
 
   return {
     getEl,
+    getKey,
     startTween,
     updateTween,
     endTween,

@@ -11,8 +11,6 @@ function getSignature(value, alphabet, empty) {
   const valueChars = value.split('');
   const size = valueChars.length;
 
-  let spinnerIndex = 0;
-
   const boxes = [];
   for (let i = 0; i < size; i++) {
     const char = valueChars[i];
@@ -24,37 +22,71 @@ function getSignature(value, alphabet, empty) {
       type: isSpinner ? BOX_TYPE.SPINNER : BOX_TYPE.STATIC,
       char: (isSpinner && empty) ? alphabet[0] : char,
       index: (isSpinner && !empty) ? index : 0,
-      spinnerIndex,
     };
-
-    if (isSpinner) spinnerIndex += 1;
   }
 
   let spinnerKey = 0;
   let staticKey = 0;
 
   for (let i = size - 1; i >= 0; i--) {
-    if (boxes[i].type === BOX_TYPE.SPINNER) boxes[i].key = spinnerKey++;
-    else if (boxes[i].type === BOX_TYPE.STATIC) boxes[i].key = staticKey++;
+    if (boxes[i].type === BOX_TYPE.SPINNER) boxes[i].key = `sp${spinnerKey++}`;
+    else if (boxes[i].type === BOX_TYPE.STATIC) boxes[i].key = `st${staticKey++}`;
   }
 
   return boxes;
 }
 
-function getDirection(prevSignature, nextSignature) {
-  const prevLength = prevSignature.length;
-  const nextLength = nextSignature.length;
+function getDiff(prevSignature, nextSignature) {
+  const diffSignature = [];
 
-  const l = Math.min(prevLength, nextLength);
-  for (let i = 0; i < l; i++) {
-    if (nextSignature[i].index > prevSignature[i].index) return 1;
-    if (nextSignature[i].index < prevSignature[i].index) return -1;
+  const nl = nextSignature.length;
+  let pl = prevSignature.length;
+
+  let direction = 1;
+  let match = false;
+  const prevStack = [];
+  for (let ni = nl - 1; ni >= 0; ni--) {
+    const nextChar = { ...nextSignature[ni] };
+    match = false;
+
+    for (let pi = pl - 1; pi >= 0; pi--) {
+      const prevChar = { ...prevSignature[pi] };
+
+      if (prevChar.type === nextChar.type && prevChar.key === nextChar.key) {
+        diffSignature.unshift(...prevStack);
+        prevStack.splice(0, prevStack.length);
+        pl = pi;
+
+        match = true;
+        if (nextChar.index > prevChar.index) direction = 1;
+        else if (nextChar.index < prevChar.index) direction = -1;
+
+        break;
+      }
+
+      prevChar.leave = true;
+      prevStack.unshift(prevChar);
+    }
+
+    if (match === false) nextChar.enter = true;
+    // direction check
+    diffSignature.unshift(nextChar);
   }
 
-  if (nextLength > prevLength) return 1;
-  if (nextLength < prevLength) return -1;
+  if (prevStack.length > 0) {
+    diffSignature.unshift(...prevStack);
+    direction = -1;
+  }
 
-  return 0;
+  // spinner index
+  let spinnerIndex = 0;
+  const size = diffSignature.length;
+  for (let i = 0; i < size; i++) {
+    diffSignature[i].spinnerIndex = spinnerIndex;
+    if (diffSignature[i].type === BOX_TYPE.SPINNER) spinnerIndex++;
+  }
+
+  return [diffSignature, direction];
 }
 
 export default function createCounter(initialValue = '', defaultValue = '', options = {}) {
@@ -165,9 +197,9 @@ export default function createCounter(initialValue = '', defaultValue = '', opti
     else if (value === '') nextSignature = emptySignature;
     else nextSignature = getSignature(value, ALPHABET);
 
-    const direction = getDirection(prevSignature, nextSignature);
+    const [diff, direction] = getDiff(prevSignature, nextSignature);
 
-    startTween(nextSignature, direction);
+    startTween(diff, direction);
     startLoop();
 
     prevSignature = nextSignature;

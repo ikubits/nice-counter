@@ -2,6 +2,7 @@ import eslint from '@rollup/plugin-eslint';
 import terser from '@rollup/plugin-terser';
 import scss from 'rollup-plugin-scss';
 
+const name = 'niceCounter';
 const watchPath = './src/**';
 const inputFile = './src/js/main.js';
 const outputFile = (suffix = '') => `./dist/nice-counter${suffix}.js`;
@@ -30,6 +31,7 @@ export default [
 ].map((config) => ((config.prod === true) ? ({
   input: inputFile,
   output: {
+    name,
     file: outputFile(config.suffix),
     format: config.format,
     plugins: [terser()],
@@ -41,6 +43,7 @@ export default [
     include: watchPath,
   },
   output: {
+    name,
     file: outputFile(config.suffix),
     format: config.format,
     sourcemap: true,
