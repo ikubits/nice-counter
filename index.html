@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1">
+    <title>Nice Counter Dev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./src/docs/style.css">
+  </head>
+  <body class="flex flex-col min-h-screen bg-gray-50">
+    <div class="content flex flex-col items-center justify-center mx-auto text-center" style="margin-top: 20vh;">
+      <span
+        class="number text-6xl font-sacramento"
+        id="static"
+      >123 456 789.12</span>
+
+      <nice-counter
+        class="number text-6xl font-sacramento"
+        id="nice-counter"
+      >123 456 789.12</nice-counter>
+
+      <div class="buttons mt-10 flex items-center gap-4">
+        <button class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition" id="toggle">Toggle</button>
+        <button class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition" id="set">987-654-321.98</button>
+      </div>
+
+      <div class="range mt-10 flex flex-col items-center">
+        <label for="duration-range" class="text-xl">Duration</label>
+        <input
+          type="range"
+          id="duration-range"
+          class="mt-2 w-60"
+          min="0"
+          max="10000"
+          value="1000"
+          step="100"
+        />
+        <input
+          type="text"
+          id="duration-value"
+          class="mt-4 w-32 text-center text-xl"
+          value="1000"
+        />
+      </div>
+    </div>
+
+    <script type="module" src="./src/js/main.js"></script>
+    <script type="module">
+      (function(){
+        const counterEl = document.getElementById('nice-counter');
+        const toggleEl = document.getElementById('toggle');
+        const setEl = document.getElementById('set');
+        const durationRangeEl = document.getElementById('duration-range');
+        const durationValueEl = document.getElementById('duration-value');
+
+        function onToggleClick() {
+          counterEl.value = counterEl.value === null ? '' : null;
+        }
+
+        function onSetClick() {
+          counterEl.value = '987-654-321.98';
+        }
+
+        function onRangeChange() {
+          durationValueEl.value = durationRangeEl.value;
+          updateDuration();
+        }
+
+        function onValueChange() {
+          durationRangeEl.value = durationValueEl.value;
+          updateDuration();
+        }
+
+        function updateDuration() {
+          counterEl.duration = durationRangeEl.value;
+        }
+
+        toggleEl.addEventListener('click', onToggleClick);
+        setEl.addEventListener('click', onSetClick);
+        durationRangeEl.addEventListener('input', onRangeChange);
+        durationValueEl.addEventListener('change', onValueChange);
+      })();
+    </script>
+  </body>
+</html>

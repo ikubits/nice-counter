@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [tailwindcss()],
   server: {
-    open: '/src/docs/index.html',
+    open: true,
   },
   build: {
     lib: {
