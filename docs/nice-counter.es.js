@@ -38,56 +38,67 @@ function s(e) {
 	let r = o(e[0]);
 	return t.appendChild(r), t;
 }
+function c(e, t) {
+	let n = a("span", { class: "nc__spinner" }), r = o(e), i = o(t);
+	return n.appendChild(r), n.appendChild(i), n;
+}
 //#endregion
 //#region src/js/helpers.js
-function c(e, t, n) {
+function l(e, t, n) {
 	return e + (t - e) * n;
 }
 //#endregion
 //#region src/js/spinner.js
-function l(e) {
+function u(e) {
 	return e.getBoundingClientRect().width;
 }
-function u(e, r) {
-	let i = !0, { type: u } = e, d = u === t.SPINNER, f = a("span", { class: "nc__box" }), p = r.length, m = o(e.char, n.STATIC);
-	f.appendChild(m);
-	let h = d ? s(r) : o(e.char, n.ANIMATED), g = e.char, _ = e.index, v = !1, y = 0, b = 0, x = 0, S = 0;
-	function C(e) {
-		return (e % p + p) % p;
+function d(e, r) {
+	let i = !0, { type: d } = e, f = d === t.SPINNER, p = a("span", { class: "nc__box" }), m = r.length, h = o(e.char, n.STATIC);
+	p.appendChild(h);
+	let g = f ? s(r) : o(e.char, n.ANIMATED), _ = e.char, v = e.index, y = !1, b = 0, x = 0, S = 0, C = 0;
+	function w(e) {
+		return (e % m + m) % m;
 	}
-	function w(e, t) {
-		v || (d || e.char !== g) && (y = l(m), b = _, d || (h.innerText = g), f.style.width = `${y}px`, f.appendChild(h), m.style.visibility = "hidden", m.innerText = e.char, S = d ? e.index + e.spinnerIndex * p * t : t, x = l(m), g = e.char, _ = d ? C(S) : 0, v = !0);
+	function T(e, t) {
+		if (!y && (f || e.char !== _)) {
+			if (b = u(h), x = v, f) C = e.index + e.spinnerIndex * m * t;
+			else {
+				let n = t >= 0 ? 1 : -1;
+				g = c(n === 1 ? _ : e.char, n === 1 ? e.char : _), x = n === 1 ? 0 : 1, C = +(n === 1);
+			}
+			p.style.width = `${b}px`, p.appendChild(g), h.style.visibility = "hidden", h.innerText = e.char, S = u(h), _ = e.char, v = f ? w(C) : 0, y = !0;
+		}
 	}
-	function T(e) {
-		if (!v) return;
-		let t = c(b, S, e), n = c(y, x, e), r = (d ? C(t) : t) * -100;
-		h.style.transform = `translate3d(0, ${r}%, 0)`, f.style.width = `${n}px`;
+	function E(e) {
+		if (!y) return;
+		let t = l(x, C, e), n = l(b, S, e), r = (f ? w(t) : t) * -100;
+		g.style.transform = `translate3d(0, ${r}%, 0)`, p.style.width = `${n}px`;
 	}
-	function E() {
-		v &&= (f.style.width = "", m.style.visibility = "", h.parentElement === f && f.removeChild(h), h.style.transform = "", !1);
-	}
-	w(e, 1), T(1), E();
 	function D() {
-		return f;
+		y &&= (p.style.width = "", h.style.visibility = "", g.parentElement === p && p.removeChild(g), g.style.transform = "", !1);
 	}
+	T(e, 1), E(1), D();
 	function O() {
-		i = !1;
+		return p;
 	}
 	function k() {
+		i = !1;
+	}
+	function A() {
 		return i;
 	}
 	return {
-		getEl: D,
-		startTween: w,
-		updateTween: T,
-		endTween: E,
-		destroy: O,
-		isAlive: k
+		getEl: O,
+		startTween: T,
+		updateTween: E,
+		endTween: D,
+		destroy: k,
+		isAlive: A
 	};
 }
 //#endregion
 //#region src/js/effect.js
-function d() {
+function f() {
 	let e = i("svg", {
 		width: 0,
 		height: 0,
@@ -110,8 +121,8 @@ function d() {
 }
 //#endregion
 //#region src/js/counter.js
-var f = "0123456789".split(""), p = 1e3;
-function m(e, n, r) {
+var p = "0123456789".split(""), m = 1e3;
+function h(e, n, r) {
 	let i = e.split(""), a = i.length, o = 0, s = [];
 	for (let e = 0; e < a; e++) {
 		let a = i[e], c = n.indexOf(a), l = c !== -1;
@@ -126,7 +137,7 @@ function m(e, n, r) {
 	for (let e = a - 1; e >= 0; e--) s[e].type === t.SPINNER ? s[e].key = c++ : s[e].type === t.STATIC && (s[e].key = l++);
 	return s;
 }
-function h(e, t) {
+function g(e, t) {
 	let n = e.length, r = t.length, i = Math.min(n, r);
 	for (let n = 0; n < i; n++) {
 		if (t[n].index > e[n].index) return 1;
@@ -134,17 +145,17 @@ function h(e, t) {
 	}
 	return r > n ? 1 : r < n ? -1 : 0;
 }
-function g(t = "", n = "", r = {}) {
-	let i = m(n, f), o = m(n, f, !0), s = m(t, f), c = [], l = r.duration ?? p, g = e, _ = a("span", { class: "nc" }), v = document.createDocumentFragment();
+function _(t = "", n = "", r = {}) {
+	let i = h(n, p), o = h(n, p, !0), s = h(t, p), c = [], l = r.duration ?? m, u = e, _ = a("span", { class: "nc" }), v = document.createDocumentFragment();
 	{
 		let e = s.length;
 		for (let t = 0; t < e; t++) {
-			let e = u(s[t], f);
+			let e = d(s[t], p);
 			c.push(e), v.appendChild(e.getEl());
 		}
 	}
 	_.appendChild(v);
-	let y = d();
+	let y = f();
 	_.appendChild(y.getEl());
 	function b(e) {
 		let t = c.length;
@@ -173,7 +184,7 @@ function g(t = "", n = "", r = {}) {
 			S(1), C();
 			return;
 		}
-		S(g((e - T) / l)), w = requestAnimationFrame(D);
+		S(u((e - T) / l)), w = requestAnimationFrame(D);
 	}
 	function O(e) {
 		T = e, E = T + l, D(e);
@@ -186,12 +197,12 @@ function g(t = "", n = "", r = {}) {
 	}
 	function j(e) {
 		let t;
-		t = e === null ? i : e === "" ? o : m(e, f);
-		let n = h(s, t);
+		t = e === null ? i : e === "" ? o : h(e, p);
+		let n = g(s, t);
 		x(t, n), k(), s = t;
 	}
 	function M(e) {
-		l = parseInt(e === "" ? 0 : e ?? p, 10);
+		l = parseInt(e === "" ? 0 : e ?? m, 10);
 	}
 	function N() {
 		return _;
@@ -210,12 +221,12 @@ function g(t = "", n = "", r = {}) {
 }
 //#endregion
 //#region src/js/main.js
-var _ = class extends HTMLElement {
+var v = class extends HTMLElement {
 	static observedAttributes = ["value", "duration"];
 	connectedCallback() {
 		let e = this.attachShadow({ mode: "closed" }), t = new CSSStyleSheet();
 		t.replaceSync(".nc{--nc-align-offset:0em;--nc-inline-padding:.3em;margin-inline:calc(-1 * var(--nc-inline-padding));padding-inline:var(--nc-inline-padding);transform:translateY(calc(-1 * var(--nc-align-offset)));line-height:1;display:inline-flex;position:relative;overflow:hidden}.nc__box{transform:translateY(var(--nc-align-offset));flex-shrink:0;justify-content:center;display:inline-flex;position:relative}.nc__spinner{filter:url(#nc-effect);flex-direction:column;width:100%;height:100%;display:flex;position:absolute;top:0;left:0}.nc__glyph{text-align:center;white-space:pre;flex-shrink:0;display:block}.nc__glyph:not(.nc__glyph--static){-webkit-user-select:none;user-select:none}.nc__effect{z-index:-1;visibility:hidden;display:block;position:absolute;top:0;left:0}"), e.adoptedStyleSheets.push(t);
-		let n = this.textContent.trim(), r = g(this.pattern ?? n, this.value ?? n, n, { duration: this.duration });
+		let n = this.textContent.trim(), r = _(this.pattern ?? n, this.value ?? n, n, { duration: this.duration });
 		e.appendChild(r.getRootEl()), this._web_component = r;
 	}
 	disconnectedCallback() {
@@ -242,6 +253,6 @@ var _ = class extends HTMLElement {
 		e === null ? this.removeAttribute("duration") : this.setAttribute("duration", e);
 	}
 };
-window.customElements.define("nice-counter", _);
+window.customElements.define("nice-counter", v);
 //#endregion
-export { _ as default };
+export { v as default };

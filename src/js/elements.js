@@ -76,8 +76,29 @@ export function createSpinnerEl(alphabet) {
   return spinnerEl;
 }
 
+/**
+ * Create new static spinner element for non-spinner transitions
+ * @param {string} char1 first char
+ * @param {string} char2 second char
+ * @returns {element} created element
+ */
+export function createStaticSpinnerEl(char1, char2) {
+  const spinnerEl = createEl('span', {
+    class: 'nc__spinner',
+  });
+
+  const glyphEl1 = createGlyphEl(char1);
+  const glyphEl2 = createGlyphEl(char2);
+
+  spinnerEl.appendChild(glyphEl1);
+  spinnerEl.appendChild(glyphEl2);
+
+  return spinnerEl;
+}
+
 export default {
   createEl,
   createGlyphEl,
   createSpinnerEl,
+  createStaticSpinnerEl,
 };

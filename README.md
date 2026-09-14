@@ -14,10 +14,10 @@ Include the compiled script in your HTML and use the `<nice-counter>` custom ele
 
 ### Value Assignment & Behavior
 
-- **Custom Values**: Custom values should be provided without dashes (replace dashes with spaces), as animating from space to dash is currently not supported.
+- **Custom Values**: Custom values with spaces, dashes, dots, and other delimiters animate smoothly between patterns.
   ```html
-  <!-- Correct -->
-  <nice-counter value="987 654 321.98">123 456 789.12</nice-counter>
+  <!-- Example -->
+  <nice-counter value="987-654-321.98">123 456 789.12</nice-counter>
   ```
 - **`null`**: Setting the value to `null` (via JS property) or omitting/resetting resets and animates back to the default initial pattern.
 - **`''` (Empty String)**: Setting the value to an empty string (`''`) animates the counter to empty/zero signature.

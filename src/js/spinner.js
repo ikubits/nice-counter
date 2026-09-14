@@ -1,6 +1,11 @@
 import { lerp } from './helpers';
 import { BOX_TYPE, GLYPH_TYPE } from './consts';
-import { createEl, createGlyphEl, createSpinnerEl } from './elements';
+import {
+  createEl,
+  createGlyphEl,
+  createSpinnerEl,
+  createStaticSpinnerEl,
+} from './elements';
 
 function getAccurateWidth(el) {
   return el.getBoundingClientRect().width;
@@ -21,7 +26,7 @@ export default function createSpinner(signature, alphabet) {
   const staticGlyphEl = createGlyphEl(signature.char, GLYPH_TYPE.STATIC);
   boxEl.appendChild(staticGlyphEl);
 
-  const animatedEl = isSpinner
+  let animatedEl = isSpinner
     ? createSpinnerEl(alphabet)
     : createGlyphEl(signature.char, GLYPH_TYPE.ANIMATED);
 
@@ -44,16 +49,24 @@ export default function createSpinner(signature, alphabet) {
 
     beginWidth = getAccurateWidth(staticGlyphEl);
     beginIndex = prevIndex;
-    if (!isSpinner) animatedEl.innerText = prevChar;
+
+    if (!isSpinner) {
+      const dir = direction >= 0 ? 1 : -1;
+      const char1 = dir === 1 ? prevChar : nextSignature.char;
+      const char2 = dir === 1 ? nextSignature.char : prevChar;
+      animatedEl = createStaticSpinnerEl(char1, char2);
+      beginIndex = dir === 1 ? 0 : 1;
+      targetIndex = dir === 1 ? 1 : 0;
+    } else {
+      targetIndex = nextSignature.index + (nextSignature.spinnerIndex * size * direction);
+    }
+
     boxEl.style.width = `${beginWidth}px`;
     boxEl.appendChild(animatedEl);
 
     staticGlyphEl.style.visibility = 'hidden';
     staticGlyphEl.innerText = nextSignature.char;
 
-    targetIndex = isSpinner
-      ? nextSignature.index + (nextSignature.spinnerIndex * size * direction)
-      : direction;
     targetWidth = getAccurateWidth(staticGlyphEl);
 
     prevChar = nextSignature.char;
