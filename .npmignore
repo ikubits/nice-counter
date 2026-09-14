@@ -1,0 +1,16 @@
+# Demo and documentation
+src/docs/
+docs/
+vite.demo.config.js
+
+# Development and git files
+.gitignore
+.eslintrc.cjs
+.eslintignore
+.vscode/
+node_log/
+*.log
+
+# Allow dist and src
+!dist/
+!src/
