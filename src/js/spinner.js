@@ -1,5 +1,5 @@
 import { lerp } from './helpers';
-import { BOX_TYPE } from './consts';
+import { BOX_TYPE, GLYPH_TYPE } from './consts';
 import { createEl, createGlyphEl, createSpinnerEl } from './elements';
 
 function getAccurateWidth(el) {
@@ -8,7 +8,7 @@ function getAccurateWidth(el) {
 
 export default function createSpinner(signature, alphabet) {
   let alive = true;
-  const { type, key } = signature;
+  const { type } = signature;
   const isSpinner = type === BOX_TYPE.SPINNER;
 
   const boxEl = createEl('span', {
@@ -18,12 +18,12 @@ export default function createSpinner(signature, alphabet) {
   const size = alphabet.length;
 
   // -- create
-  const staticGlyphEl = createGlyphEl(signature.char, true);
+  const staticGlyphEl = createGlyphEl(signature.char, GLYPH_TYPE.STATIC);
   boxEl.appendChild(staticGlyphEl);
 
-  const spinnerEl = isSpinner
+  const animatedEl = isSpinner
     ? createSpinnerEl(alphabet)
-    : createSpinnerEl([signature.char]);
+    : createGlyphEl(signature.char, GLYPH_TYPE.ANIMATED);
 
   // -- methods
   let prevChar = signature.char;
@@ -40,37 +40,26 @@ export default function createSpinner(signature, alphabet) {
 
   function startTween(nextSignature, direction) {
     if (animating) return;
-
-    const nextChar = nextSignature.char;
-    if (!isSpinner && nextChar === prevChar) return;
-
-    // for static
-    const [bIndex, eIndex] = direction === -1 ? [1, 0] : [0, 1];
+    if (!isSpinner && nextSignature.char === prevChar) return;
 
     beginWidth = getAccurateWidth(staticGlyphEl);
-    beginIndex = isSpinner
-      ? prevIndex
-      : bIndex;
-
-    if (!isSpinner) {
-      spinnerEl.children[bIndex].innerText = prevChar;
-      spinnerEl.children[eIndex].innerText = nextChar;
-      spinnerEl.style.transform = `translate3d(0, ${bIndex * -100}%, 0)`;
-    }
-
+    beginIndex = prevIndex;
+    if (!isSpinner) animatedEl.innerText = prevChar;
     boxEl.style.width = `${beginWidth}px`;
-    boxEl.appendChild(spinnerEl);
+    boxEl.appendChild(animatedEl);
 
     staticGlyphEl.style.visibility = 'hidden';
-    staticGlyphEl.innerText = nextChar;
+    staticGlyphEl.innerText = nextSignature.char;
 
     targetIndex = isSpinner
       ? nextSignature.index + (nextSignature.spinnerIndex * size * direction)
-      : eIndex;
+      : direction;
     targetWidth = getAccurateWidth(staticGlyphEl);
 
-    prevChar = nextChar;
-    prevIndex = getModIndex(targetIndex);
+    prevChar = nextSignature.char;
+    prevIndex = isSpinner
+      ? getModIndex(targetIndex)
+      : 0;
 
     animating = true;
   }
@@ -81,7 +70,13 @@ export default function createSpinner(signature, alphabet) {
     const currentIndex = lerp(beginIndex, targetIndex, progress);
     const currentWidth = lerp(beginWidth, targetWidth, progress);
 
-    spinnerEl.style.transform = `translate3d(0, ${getModIndex(currentIndex) * -100}%, 0)`;
+    const translateY = (
+      isSpinner
+        ? getModIndex(currentIndex)
+        : currentIndex
+    ) * -100;
+
+    animatedEl.style.transform = `translate3d(0, ${translateY}%, 0)`;
     boxEl.style.width = `${currentWidth}px`;
   }
 
@@ -91,8 +86,8 @@ export default function createSpinner(signature, alphabet) {
     boxEl.style.width = '';
     staticGlyphEl.style.visibility = '';
 
-    if (spinnerEl.parentElement === boxEl) boxEl.removeChild(spinnerEl);
-    spinnerEl.style.transform = '';
+    if (animatedEl.parentElement === boxEl) boxEl.removeChild(animatedEl);
+    animatedEl.style.transform = '';
 
     animating = false;
   }
@@ -111,14 +106,6 @@ export default function createSpinner(signature, alphabet) {
   }
 
   /**
-   * Returns spinner key
-   * @returns {string} spinner key
-   */
-  function getKey() {
-    return key;
-  }
-
-  /**
    * Destroy clean up
    */
   function destroy() {
@@ -134,7 +121,6 @@ export default function createSpinner(signature, alphabet) {
 
   return {
     getEl,
-    getKey,
     startTween,
     updateTween,
     endTween,

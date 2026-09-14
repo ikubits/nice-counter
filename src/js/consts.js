@@ -4,6 +4,12 @@ export const BOX_TYPE = {
   SPINNER: 2,
 };
 
+export const GLYPH_TYPE = {
+  STATIC: 'static',
+  ANIMATED: 'animated',
+};
+
 export default {
   BOX_TYPE,
+  GLYPH_TYPE,
 };
