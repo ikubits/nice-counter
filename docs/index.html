@@ -3,9 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1">
-    <title>Docs</title>
+    <title>Nice Counter Dev</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script type="module" crossorigin src="./assets/demo.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index.css">
   </head>
   <body class="flex flex-col min-h-screen bg-gray-50">
@@ -60,73 +61,6 @@
         />
       </div>
     </div>
-
-    <script type="module" src="./nice-counter.es.js"></script>
-    
-    <script type="module">
-      (function(){
-
-        // ---- Counter with manual control ----
-
-        const counterEl = document.getElementById('nice-counter');
-        const toggleEl = document.getElementById('btn-toggle');
-        const setEl = document.getElementById('btn-set');
-
-        function onToggleClick() {
-          counterEl.value = counterEl.value === null ? '' : null;
-        }
-
-        function onSetClick() {
-          counterEl.value = '987-654-321.98';
-        }
-
-        toggleEl.addEventListener('click', onToggleClick);
-        setEl.addEventListener('click', onSetClick);
-
-        // ---- Typical count up counter ----
-
-        const counterEnterEl = document.getElementById('nice-counter-enter');
-        const enterEl = document.getElementById('btn-enter');
-        const resetEl = document.getElementById('btn-reset');
-
-        function onEnterClick() {
-          counterEnterEl.value = null;
-        }
-
-        function onResetClick() {
-          counterEnterEl.value = '';
-        }
-
-        enterEl.addEventListener('click', onEnterClick);
-        resetEl.addEventListener('click', onResetClick);
-
-        // ---- Duration control ----
-
-        const durationRangeEl = document.getElementById('in-duration-range');
-        const durationValueEl = document.getElementById('in-duration-value');
-
-        function onRangeChange() {
-          durationValueEl.value = durationRangeEl.value;
-          updateDuration();
-        }
-
-        function onValueChange() {
-          durationRangeEl.value = durationValueEl.value;
-          updateDuration();
-        }
-
-        function updateDuration() {
-          counterEl.duration = durationRangeEl.value;
-          counterEnterEl.duration = durationRangeEl.value;
-        }
-
-        durationRangeEl.addEventListener('input', onRangeChange);
-        durationValueEl.addEventListener('change', onValueChange);
-
-        // ----
-
-      })();
-    </script>
 
   </body>
 </html>
