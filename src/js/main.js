@@ -30,10 +30,9 @@ export default class NiceCounter extends HTMLElement {
     shadowRoot.adoptedStyleSheets.push(styleSheet);
 
     const defaultValue = this.textContent.trim();
-    const patternValue = this.pattern ?? defaultValue;
     const initialValue = this.value ?? defaultValue;
 
-    const webc = createCounter(patternValue, initialValue, defaultValue, {
+    const webc = createCounter(initialValue, defaultValue, {
       duration: this.duration,
     });
     shadowRoot.appendChild(webc.getRootEl());

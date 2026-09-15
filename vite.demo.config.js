@@ -9,11 +9,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const demoScript = `
     <script type="module">
       (function(){
+
+        // ---- Counter with manual control ----
+
         const counterEl = document.getElementById('nice-counter');
-        const toggleEl = document.getElementById('toggle');
-        const setEl = document.getElementById('set');
-        const durationRangeEl = document.getElementById('duration-range');
-        const durationValueEl = document.getElementById('duration-value');
+        const toggleEl = document.getElementById('btn-toggle');
+        const setEl = document.getElementById('btn-set');
 
         function onToggleClick() {
           counterEl.value = counterEl.value === null ? '' : null;
@@ -21,8 +22,32 @@ const demoScript = `
 
         function onSetClick() {
           counterEl.value = '987-654-321.98';
-          // counterEl.value = '987-654.45';
         }
+
+        toggleEl.addEventListener('click', onToggleClick);
+        setEl.addEventListener('click', onSetClick);
+
+        // ---- Typical count up counter ----
+
+        const counterEnterEl = document.getElementById('nice-counter-enter');
+        const enterEl = document.getElementById('btn-enter');
+        const resetEl = document.getElementById('btn-reset');
+
+        function onEnterClick() {
+          counterEnterEl.value = null;
+        }
+
+        function onResetClick() {
+          counterEnterEl.value = '';
+        }
+
+        enterEl.addEventListener('click', onEnterClick);
+        resetEl.addEventListener('click', onResetClick);
+
+        // ---- Duration control ----
+
+        const durationRangeEl = document.getElementById('in-duration-range');
+        const durationValueEl = document.getElementById('in-duration-value');
 
         function onRangeChange() {
           durationValueEl.value = durationRangeEl.value;
@@ -36,12 +61,14 @@ const demoScript = `
 
         function updateDuration() {
           counterEl.duration = durationRangeEl.value;
+          counterEnterEl.duration = durationRangeEl.value;
         }
 
-        toggleEl.addEventListener('click', onToggleClick);
-        setEl.addEventListener('click', onSetClick);
         durationRangeEl.addEventListener('input', onRangeChange);
         durationValueEl.addEventListener('change', onValueChange);
+
+        // ----
+
       })();
     </script>
 `;

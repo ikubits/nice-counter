@@ -60,7 +60,14 @@ function getDirection(prevSignature, nextSignature) {
 export default function createCounter(initialValue = '', defaultValue = '', options = {}) {
   const defaultSignature = getSignature(defaultValue, ALPHABET);
   const emptySignature = getSignature(defaultValue, ALPHABET, true);
-  let prevSignature = getSignature(initialValue, ALPHABET);
+  let prevSignature;
+  if (initialValue === null || initialValue === undefined) {
+    prevSignature = defaultSignature;
+  } else if (initialValue === '') {
+    prevSignature = emptySignature;
+  } else {
+    prevSignature = getSignature(initialValue, ALPHABET);
+  }
   let spinners = [];
 
   let duration = options.duration ?? DURATION;

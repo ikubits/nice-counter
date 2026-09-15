@@ -146,7 +146,9 @@ function g(e, t) {
 	return r > n ? 1 : r < n ? -1 : 0;
 }
 function _(t = "", n = "", r = {}) {
-	let i = h(n, p), o = h(n, p, !0), s = h(t, p), c = [], l = r.duration ?? m, u = e, _ = a("span", { class: "nc" }), v = document.createDocumentFragment();
+	let i = h(n, p), o = h(n, p, !0), s;
+	s = t == null ? i : t === "" ? o : h(t, p);
+	let c = [], l = r.duration ?? m, u = e, _ = a("span", { class: "nc" }), v = document.createDocumentFragment();
 	{
 		let e = s.length;
 		for (let t = 0; t < e; t++) {
@@ -226,7 +228,7 @@ var v = class extends HTMLElement {
 	connectedCallback() {
 		let e = this.attachShadow({ mode: "closed" }), t = new CSSStyleSheet();
 		t.replaceSync(".nc{--nc-align-offset:0em;--nc-inline-padding:.3em;margin-inline:calc(-1 * var(--nc-inline-padding));padding-inline:var(--nc-inline-padding);transform:translateY(calc(-1 * var(--nc-align-offset)));line-height:1;display:inline-flex;position:relative;overflow:hidden}.nc__box{transform:translateY(var(--nc-align-offset));flex-shrink:0;justify-content:center;display:inline-flex;position:relative}.nc__spinner{filter:url(#nc-effect);flex-direction:column;width:100%;height:100%;display:flex;position:absolute;top:0;left:0}.nc__glyph{text-align:center;white-space:pre;flex-shrink:0;display:block}.nc__glyph:not(.nc__glyph--static){-webkit-user-select:none;user-select:none}.nc__effect{z-index:-1;visibility:hidden;display:block;position:absolute;top:0;left:0}"), e.adoptedStyleSheets.push(t);
-		let n = this.textContent.trim(), r = _(this.pattern ?? n, this.value ?? n, n, { duration: this.duration });
+		let n = this.textContent.trim(), r = _(this.value ?? n, n, { duration: this.duration });
 		e.appendChild(r.getRootEl()), this._web_component = r;
 	}
 	disconnectedCallback() {

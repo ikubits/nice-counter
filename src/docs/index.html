@@ -9,27 +9,43 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body class="flex flex-col min-h-screen bg-gray-50">
-    <div class="content flex flex-col items-center justify-center mx-auto text-center">
+    <div class="content flex flex-col items-center justify-center mx-auto text-center" style="margin-top: 20vh;">
+
+      <h2 class="text-xl font-medium">Static Text</h2>
       <span
         class="number text-6xl font-sacramento"
         id="static"
       >123 456 789.12</span>
 
+      <h2 class="text-xl font-medium">Counter with manual control</h2>
       <nice-counter
         class="number text-6xl font-sacramento"
         id="nice-counter"
       >123 456 789.12</nice-counter>
 
-      <div class="buttons mt-10 flex items-center gap-4">
-        <button class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition" id="toggle">Toggle</button>
-        <button class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition" id="set">987-654-321.98</button>
+      <h2 class="text-xl font-medium">Typical count up counter</h2>
+      <nice-counter
+        class="number text-6xl font-sacramento"
+        id="nice-counter-enter"
+        value=""
+      >123 456 789.12</nice-counter>
+
+      <div class="buttons mt-8 flex items-center gap-4">
+        <button type="button" class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition-colors cursor-pointer" id="btn-toggle">Toggle</button>
+        <button type="button" class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition-colors cursor-pointer" id="btn-set">987-654-321.98</button>
       </div>
 
-      <div class="range mt-10 flex flex-col items-center">
-        <label for="duration-range" class="text-xl">Duration</label>
+      <div class="buttons mt-8 flex items-center gap-4">
+        <button type="button" class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition-colors cursor-pointer" id="btn-enter">Enter</button>
+        <button type="button" class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition-colors cursor-pointer" id="btn-reset">Reset</button>
+      </div>
+
+      <h2 class="text-xl font-medium mt-8">Duration control (shared)</h2>
+      <div class="range flex flex-col items-center">
+        <label for="in-duration-range" class="text-xl">Duration</label>
         <input
           type="range"
-          id="duration-range"
+          id="in-duration-range"
           class="mt-2 w-60"
           min="0"
           max="10000"
@@ -38,8 +54,8 @@
         />
         <input
           type="text"
-          id="duration-value"
-          class="mt-4 w-32 text-center text-xl"
+          id="in-duration-value"
+          class="mt-4 w-32 text-center text-xl px-4 py-2 border border-gray-300"
           value="1000"
         />
       </div>
