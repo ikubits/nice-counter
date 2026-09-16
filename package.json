@@ -6,6 +6,10 @@
   "main": "dist/nice-counter.es.js",
   "module": "dist/nice-counter.es.js",
   "exports": {
+    ".": {
+      "import": "./dist/nice-counter.es.js",
+      "require": "./dist/nice-counter.cjs.js"
+    },
     "./es": "./dist/nice-counter.es.js",
     "./cjs": "./dist/nice-counter.cjs.js",
     "./iife": "./dist/nice-counter.iife.js"
@@ -15,6 +19,7 @@
     "build": "vite build && vite build --config vite.demo.config.js",
     "prepare": "npm run lint && npm run build",
     "preview": "vite preview",
+    "serve": "serve docs/",
     "lint": "eslint src/"
   },
   "keywords": [
@@ -23,7 +28,7 @@
     "countdown",
     "odometer"
   ],
-  "author": "dobrapyra",
+  "author": "ikubits",
   "license": "MIT",
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
