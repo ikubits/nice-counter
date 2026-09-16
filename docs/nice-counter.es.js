@@ -55,45 +55,46 @@ function u(e) {
 function d(e, r) {
 	let i = !0, { type: d } = e, f = d === t.SPINNER, p = a("span", { class: "nc__box" }), m = r.length, h = o(e.char, n.STATIC);
 	p.appendChild(h);
-	let g = f ? s(r) : o(e.char, n.ANIMATED), _ = e.char, v = e.index, y = !1, b = 0, x = 0, S = 0, C = 0;
-	function w(e) {
+	let g = f ? s(r) : o(e.char, n.ANIMATED), _ = e.char, v = e.index, y = !1, b = 0, x = 0, S = 0, C = 0, w = e.index, T = 0;
+	function E(e) {
 		return (e % m + m) % m;
 	}
-	function T(e, t) {
-		if (!y && (f || e.char !== _)) {
-			if (b = u(h), x = v, f) C = e.index + e.spinnerIndex * m * t;
+	function D(e, t) {
+		if (f || e.char !== _ || y) {
+			if (y ? (g.parentElement === p && p.removeChild(g), g.style.transform = "", b = T || u(p), x = w) : (b = u(h), x = v), f) C = e.index + e.spinnerIndex * m * t;
 			else {
 				let n = t >= 0 ? 1 : -1;
 				g = c(n === 1 ? _ : e.char, n === 1 ? e.char : _), x = n === 1 ? 0 : 1, C = +(n === 1);
 			}
-			p.style.width = `${b}px`, p.appendChild(g), h.style.visibility = "hidden", h.innerText = e.char, S = u(h), _ = e.char, v = f ? w(C) : 0, y = !0;
+			p.style.width = `${b}px`, p.appendChild(g), h.style.visibility = "hidden", h.innerText = e.char, S = u(h), _ = e.char, v = f ? E(C) : 0, y = !0;
 		}
 	}
-	function E(e) {
+	function O(e) {
 		if (!y) return;
-		let t = l(x, C, e), n = l(b, S, e), r = (f ? w(t) : t) * -100;
-		g.style.transform = `translate3d(0, ${r}%, 0)`, p.style.width = `${n}px`;
-	}
-	function D() {
-		y &&= (p.style.width = "", h.style.visibility = "", g.parentElement === p && p.removeChild(g), g.style.transform = "", !1);
-	}
-	T(e, 1), E(1), D();
-	function O() {
-		return p;
+		w = l(x, C, e), T = l(b, S, e);
+		let t = (f ? E(w) : w) * -100;
+		g.style.transform = `translate3d(0, ${t}%, 0)`, p.style.width = `${T}px`;
 	}
 	function k() {
+		y &&= (p.style.width = "", h.style.visibility = "", g.parentElement === p && p.removeChild(g), g.style.transform = "", !1);
+	}
+	D(e, 1), O(1), k();
+	function A() {
+		return p;
+	}
+	function j() {
 		i = !1;
 	}
-	function A() {
+	function M() {
 		return i;
 	}
 	return {
-		getEl: O,
-		startTween: T,
-		updateTween: E,
-		endTween: D,
-		destroy: k,
-		isAlive: A
+		getEl: A,
+		startTween: D,
+		updateTween: O,
+		endTween: k,
+		destroy: j,
+		isAlive: M
 	};
 }
 //#endregion

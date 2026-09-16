@@ -38,17 +38,27 @@ export default function createSpinner(signature, alphabet) {
   let beginIndex = 0;
   let targetWidth = 0;
   let targetIndex = 0;
+  let currentIndex = signature.index;
+  let currentWidth = 0;
 
   function getModIndex(index) {
     return ((index % size) + size) % size;
   }
 
   function startTween(nextSignature, direction) {
-    if (animating) return;
-    if (!isSpinner && nextSignature.char === prevChar) return;
+    if (!isSpinner && nextSignature.char === prevChar && !animating) return;
 
-    beginWidth = getAccurateWidth(staticGlyphEl);
-    beginIndex = prevIndex;
+    if (animating) {
+      if (animatedEl.parentElement === boxEl) {
+        boxEl.removeChild(animatedEl);
+      }
+      animatedEl.style.transform = '';
+      beginWidth = currentWidth || getAccurateWidth(boxEl);
+      beginIndex = currentIndex;
+    } else {
+      beginWidth = getAccurateWidth(staticGlyphEl);
+      beginIndex = prevIndex;
+    }
 
     if (!isSpinner) {
       const dir = direction >= 0 ? 1 : -1;
@@ -80,8 +90,8 @@ export default function createSpinner(signature, alphabet) {
   function updateTween(progress) {
     if (!animating) return;
 
-    const currentIndex = lerp(beginIndex, targetIndex, progress);
-    const currentWidth = lerp(beginWidth, targetWidth, progress);
+    currentIndex = lerp(beginIndex, targetIndex, progress);
+    currentWidth = lerp(beginWidth, targetWidth, progress);
 
     const translateY = (
       isSpinner
