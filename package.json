@@ -1,6 +1,6 @@
 {
   "name": "nice-counter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An Odometer.js-inspired animated counter Web Component with smooth easing and motion blur effect",
   "type": "module",
   "main": "dist/nice-counter.es.js",
