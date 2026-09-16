@@ -2,6 +2,8 @@
 
 An Odometer.js-inspired animated counter Web Component with smooth easing, motion blur effect, and custom delimiter patterns. Built with Vite and Tailwind CSS.
 
+[🚀 **View Live Demo**](https://ikubits.github.io/nice-counter/)
+
 ## Installation
 
 Install the package via npm:
