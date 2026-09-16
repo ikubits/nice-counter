@@ -180,45 +180,49 @@ function _(t = "", n = "", r = {}) {
 			e.endTween();
 		}), c = c.filter((e) => !e.isDestroyed);
 	}
-	let w = null, T = 0, E = 0;
-	function D(e) {
-		if (e >= E) {
-			S(1), C();
+	let w = null, T = 0, E = 0, D = 0;
+	function O(e) {
+		if (D = e, e >= E) {
+			S(1), C(), w = null;
 			return;
 		}
-		S(u((e - T) / l)), w = requestAnimationFrame(D);
+		S(u((e - T) / l)), w = requestAnimationFrame(O);
 	}
-	function O(e) {
-		T = e, E = T + l, D(e);
-	}
-	function k() {
-		w = requestAnimationFrame(O);
+	function k(e) {
+		D = e, T = e, E = T + l, O(e);
 	}
 	function A() {
-		cancelAnimationFrame(w);
+		w !== null && (cancelAnimationFrame(w), w = null), w = requestAnimationFrame(k);
 	}
-	function j(e) {
+	function j() {
+		w !== null && (cancelAnimationFrame(w), w = null);
+	}
+	function M(e) {
 		let t;
 		t = e === null ? i : e === "" ? o : h(e, p);
 		let n = g(s, t);
-		x(t, n), k(), s = t;
+		x(t, n), A(), s = t;
 	}
-	function M(e) {
-		l = parseInt(e === "" ? 0 : e ?? m, 10);
-	}
-	function N() {
-		return _;
+	function N(e) {
+		let t = parseInt(e === "" ? 0 : e ?? m, 10);
+		if (w !== null && D > 0 && l > 0) {
+			let e = D - T, n = Math.min(1, e / l);
+			l = t, T = D - n * l, E = T + l;
+		} else l = t;
 	}
 	function P() {
-		A(), b((e) => {
+		return _;
+	}
+	function F() {
+		j(), b((e) => {
 			e.destroy();
 		});
 	}
 	return {
-		getRootEl: N,
-		setValue: j,
-		setDuration: M,
-		destroy: P
+		getRootEl: P,
+		setValue: M,
+		setDuration: N,
+		destroy: F
 	};
 }
 //#endregion

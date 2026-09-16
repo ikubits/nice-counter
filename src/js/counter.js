@@ -132,11 +132,14 @@ export default function createCounter(initialValue = '', defaultValue = '', opti
   let raf = null;
   let startTime = 0;
   let endTime = 0;
+  let lastTimestamp = 0;
 
   function tick(timestamp) {
+    lastTimestamp = timestamp;
     if (timestamp >= endTime) {
       updateTween(1);
       endTween();
+      raf = null;
       return;
     }
 
@@ -146,6 +149,7 @@ export default function createCounter(initialValue = '', defaultValue = '', opti
   }
 
   function firstTick(timestamp) {
+    lastTimestamp = timestamp;
     startTime = timestamp;
     endTime = startTime + duration;
 
@@ -153,11 +157,18 @@ export default function createCounter(initialValue = '', defaultValue = '', opti
   }
 
   function startLoop() {
+    if (raf !== null) {
+      cancelAnimationFrame(raf);
+      raf = null;
+    }
     raf = requestAnimationFrame(firstTick);
   }
 
   function stopLoop() {
-    cancelAnimationFrame(raf);
+    if (raf !== null) {
+      cancelAnimationFrame(raf);
+      raf = null;
+    }
   }
 
   // -- methods
@@ -185,7 +196,16 @@ export default function createCounter(initialValue = '', defaultValue = '', opti
    * @param {number} newDuration animation duration
    */
   function setDuration(newDuration) {
-    duration = parseInt(newDuration === '' ? 0 : (newDuration ?? DURATION), 10);
+    const parsedDuration = parseInt(newDuration === '' ? 0 : (newDuration ?? DURATION), 10);
+    if (raf !== null && lastTimestamp > 0 && duration > 0) {
+      const elapsed = lastTimestamp - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      duration = parsedDuration;
+      startTime = lastTimestamp - (progress * duration);
+      endTime = startTime + duration;
+    } else {
+      duration = parsedDuration;
+    }
   }
 
   /**
