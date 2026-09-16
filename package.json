@@ -30,6 +30,14 @@
   ],
   "author": "ikubits",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikubits/nice-counter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ikubits/nice-counter/issues"
+  },
+  "homepage": "https://github.com/ikubits/nice-counter#readme",
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
     "@tailwindcss/vite": "^4.3.3",
