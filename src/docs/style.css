@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sacramento: "Sacramento", cursive;
+  --font-noto: "Noto Sans", sans-serif;
+  --font-space: "Space Grotesk", sans-serif;
+  --font-lora: "Lora", serif;
+  --font-oswald: "Oswald", sans-serif;
 }

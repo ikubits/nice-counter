@@ -3,47 +3,57 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=1">
-    <title>Nice Counter Dev</title>
+    <title>Nice Counter</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
     <script type="module" crossorigin src="./assets/demo.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index.css">
   </head>
-  <body class="flex flex-col min-h-screen bg-gray-50">
-    <div class="content flex flex-col items-center justify-center mx-auto text-center" style="margin-top: 20vh;">
+  <body class="flex flex-col min-h-screen bg-gray-50 font-noto">
+    <div class="content flex flex-col items-center justify-center mx-auto text-center py-10">
 
-      <h2 class="text-xl font-medium">Static Text</h2>
-      <span
-        class="number text-6xl font-sacramento"
-        id="static"
-      >123 456 789.12</span>
+      <div class="data-[font=space]:font-space data-[font=lora]:font-lora data-[font=oswald]:font-oswald" data-font="space">
+        <div class="mt-6">
+          <h2 class="text-lg font-noto font-medium mb-2">Static text</h2>
+          <span
+            class="number text-6xl"
+            id="static"
+          >123 456 789.12</span>
+        </div>
 
-      <h2 class="text-xl font-medium">Counter with manual control</h2>
-      <nice-counter
-        class="number text-6xl font-sacramento"
-        id="nice-counter"
-      >123 456 789.12</nice-counter>
+        <div class="mt-6">
+          <h2 class="text-lg font-noto font-medium mb-2">Counter with manual control</h2>
+          <nice-counter
+            class="number text-6xl"
+            id="nice-counter"
+          >123 456 789.12</nice-counter>
+        </div>
 
-      <h2 class="text-xl font-medium">Typical count up counter</h2>
-      <nice-counter
-        class="number text-6xl font-sacramento"
-        id="nice-counter-enter"
-        value=""
-      >123 456 789.12</nice-counter>
+        <div class="mt-6">
+          <h2 class="text-lg font-noto font-medium mb-2">Typical count up counter</h2>
+          <nice-counter
+            class="number text-6xl"
+            id="nice-counter-enter"
+            value=""
+          >123 456 789.12</nice-counter>
+        </div>
+      </div>
 
-      <div class="buttons mt-8 flex items-center gap-4">
+      <div class="mt-6 flex items-center gap-4">
         <button type="button" class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition-colors cursor-pointer" id="btn-toggle">Toggle</button>
         <button type="button" class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition-colors cursor-pointer" id="btn-set">987-654-321.98</button>
       </div>
 
-      <div class="buttons mt-8 flex items-center gap-4">
+      <div class="mt-6 flex items-center gap-4">
         <button type="button" class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition-colors cursor-pointer" id="btn-enter">Enter</button>
         <button type="button" class="button px-8 py-4 bg-gray-800 text-gray-100 font-semibold hover:bg-gray-900 transition-colors cursor-pointer" id="btn-reset">Reset</button>
       </div>
 
-      <h2 class="text-xl font-medium mt-8">Duration control (shared)</h2>
-      <div class="range flex flex-col items-center">
-        <label for="in-duration-range" class="text-xl">Duration</label>
+      <h2 class="text-lg font-medium mt-8 mb-2">Shared controls</h2>
+
+      <div class="mt-6 flex flex-col items-center">
+        <label class="text-md font-noto font-medium">Duration</label>
         <input
           type="range"
           id="in-duration-range"
@@ -60,6 +70,22 @@
           value="1000"
         />
       </div>
+
+      <div class="mt-6 flex flex-col items-center">
+        <label class="text-md font-noto font-medium mb-2">Example fonts</label>
+        <div class="flex items-center gap-6">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="font-select" value="space" checked class="cursor-pointer"> Space Grotesk
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="font-select" value="lora" class="cursor-pointer"> Lora
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="font-select" value="oswald" class="cursor-pointer"> Oswald
+          </label>
+        </div>
+      </div>
+
     </div>
 
   </body>
